@@ -1,0 +1,430 @@
+\hypertarget{initdat}{}
+\section{init.dat}
+\label{sec:initdat}
+
+The \texttt{init.dat} file contains the parameters that are needed to control
+the numerical details of the code, the differential equations that need to be
+solved using which variables and boundary conditions and which physics (nucleosynthesis,
+rotation, stellar wind, overshooting, et cetera).  The new format (post--2005 CVS version)
+contains one parameter (either scalar or array) per line.  If a variable name
+is used multiple times (on multiple lines), the last entry will be used.  This 
+is useful for experimenting with values, while keeping the old ones in the file.
+If a variable is not mentioned at all, the (hard-coded) default value is used.
+
+Thus, the order of the parameters does not matter, but for reasons of clarity and
+consistency it is a good practice to keep the order used here.
+
+
+
+\subsection{Output}
+\label{sec:initdat:output}
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[KT(1) -- (4)] also known as KT1, KT2, KT3, KT4:
+\item[KT1]\hypertarget{kt1}{} Print internal details of every \texttt{KT1}-th model to \texttt{file.out1,2} and \texttt{file.mdl1,2} (20 or 200)
+\item[KT2]\hypertarget{kt2}{} Print internal details at every \texttt{KT2}-th mesh point of the \texttt{KT1}-th model (\texttt{file.out1,2} only) (1 or 2)
+\item[KT3]\hypertarget{kt3}{} Print KT3 `pages' of details for every \texttt{KT1}-th model to \texttt{file.out1,2} (1, 2 or 3)
+\item[KT4]\hypertarget{kt4}{} Print a five-line summary of every \texttt{KT4}-th model to \texttt{file.out1,2} and save every \texttt{KT4}-th evolution model to \texttt{file.plt1,2} (1, 2 or 4) 
+\item[KT5]\hypertarget{kt5}{} Print a one-line summary of each iteration of each model to \texttt{file.out1,2}, except for the first KT5 iterations of each model  (0 or 2)
+\item[KSV]\hypertarget{ksv}{} an output model is stored in \texttt{file.mod (fort.15)} after every \texttt{KSV}-th timestep in a run, in the form needed as input for a 
+  further run. The last model of a run is automatically also stored, in \texttt{file.last* (fort.13,14)}. (5000)
+\end{description}
+
+
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[KSX(45)]\hypertarget{ksx}{} The first 15 integers identify the quantities, such as $\log  \rho, L, X(^4\mathrm{He})$, \ldots, which are to be printed in 
+  columns on the first `page' of structure details for every \hyperlink{kt1}{\texttt{KT1}}-th model. The next two lots of 15 relate 
+  to the optional further `pages'. See section~\ref{sec:sxpx}.
+\end{description}
+
+
+
+
+
+\subsection{Mesh spacing}
+\label{sec:initdat:mesh}
+
+\begin{description}
+  % \item[]\hypertarget{}{}
+\item[KH2]\hypertarget{kh2}{} The number of mesh points you want; if this differs from KH the code should interpolate in the 
+  given model to produce a new one; but you must also set \hyperlink{jch}{JCH}  to $\ge$ 2 to implement this change  (199)
+\item[JCH]\hypertarget{jch}{} If JCH $>$ 1, the REMESH initialises the model in various ways:
+  \begin{description}
+  \item[JCH = 1] Does nothing.
+  \item[JCH = 2] Initialises some new variables, for instance the mass,
+  \item[JCH = 3] = \emph{(2)} + constructs new mesh spacing by interpolation,
+  \item[JCH = 4] = \emph{(3)} + initialises composition to uniformity (for ZAMS).
+  \end{description}
+  At least in some cases \texttt{JMX} in \hyperlink{initrun}{\texttt{init.run}} must be 0 if \texttt{JCH} $>$ 1 in order for the first model to converge.
+
+\item[CT(1) -- (10)]\hypertarget{ct}{} coefficients used in the mesh-spacing function $Q$: \\
+  Q = CT(4)*log(P) + CT(5)*log(P+CT(9)) + \\
+      CT(7)*log(T) - CT(7)*log(T + CT(10)) - \\
+      CT(3)*log(1 + R$^2$ / CT(8)) + \\
+      log( CT(6) * Mc$^{2/3}$ / (CT(6)*Mc$^{2/3}$ + M$^{2/3}$) )
+  \begin{description}
+  \item[CT(1)] Unused (0.00)
+  \item[CT(2)] Used for Luminosity weight (0.00, reasonable values seem to be 0.01-1.0, and perhaps other values)
+  \item[CT(3)] Used for Radius weight, together with CT(8) (0.05)
+  \item[CT(4)] Used for Pressure weight, together with CT(5,10) (0.05)
+  \item[CT(5)] Used for Pressure weight, together with CT(4,10) (0.15)
+  \item[CT(6)] Used for Mass weight (0.02)
+  \item[CT(7)] Used for Temperature weight, together with CT(10) (0.45)
+  \item[CT(8)] Used for Radius weight, together with CT(3) (1.E-4)
+  \item[CT(9)] Used for Pressure weight, together with CT(4,5) (1.E15)
+  \item[CT(10)] Used for Temperature weight, together with CT(7) (2.E4)
+  \end{description}
+
+\item[use\_smooth\_remesher]\hypertarget{use_smooth_remesher}{} Switch for the new ``smooth'' remesher.  See also \texttt{start\_with\_rigid\_rotation} in \hyperlink{initrun}{\texttt{init.run}} \ \  (.false.)
+\item[relax\_loaded\_model]\hypertarget{relax_loaded_model}{} Switch for the new ``smooth'' remesher.   \ \  (.true.)
+\end{description}
+
+
+
+
+
+\subsection{Time steps}
+\label{sec:initdat:timestep}
+
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[KN]\hypertarget{kn}{} The number of variables that will be used for determining the next time step.
+\end{description}
+
+
+
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[KJN(1)-KJN(40)]\hypertarget{kjn}{} The first KN of these identify the variables to be used for determining the next time step, see section~\ref{sec:indvars}.
+\end{description}
+
+
+
+
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[CT1]\hypertarget{ct1}{} The next timestep cannot (normally) be less than CT1 times present timestep (0.8, 0.9 or 1.0)
+\item[CT2]\hypertarget{ct2}{} The next timestep cannot be greater than CT2 times present timestep.
+  If both CT1 and CT2 are 1.0, then the timestep is constant, of course (which is useful for constructing a ZAMS by 
+  artificial `mass-gain') -- except that if a model fails to converge the timestep will be multiplied by \hyperlink{ct3}{CT3}  (1.1, 1.05 or 1.0)
+\item[CT3]\hypertarget{ct3}{} when the solution package fails to converge, the code retreats to the second-last converged model, and continues 
+  with the timestep decreased by the factor CT3. (0.3 or 0.5)
+\end{description}
+
+
+
+
+
+\subsection{Convergence}
+\label{sec:initdat:convergence}
+
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[KR1]\hypertarget{kr1}{} The maximum number of iterations allowed on the first timestep (20)
+\item[KR2]\hypertarget{kr2}{} The maximum number of iterations allowed on later timesteps  (12)
+  If you want to see output when the code is struggeling to converge a model, make sure \texttt{KR2} $>$
+  \texttt{KT5}.
+\item[climit]\hypertarget{climit}{} Limit changes in variables during iterations \ \  (1.0d-1)
+
+
+\item[use\_quadratic\_predictions]\hypertarget{use_quadratic_predictions}{} Normally, the code uses linear extrapolation to predict values for the first iteration on the next timestep. Set this switch to .true. to use quadratic extrapolation, which can be slightly more accurate.\ \ (.false.)
+\item[use\_fudge\_control]\hypertarget{use_fudge_control}{}      (\textbf{obsolete}, present for backward compatibility)  Used to switch certain ``fudges'' on and off, as needed. Now unused. \ \ (.true.)
+\item[allow\_extension]\hypertarget{allow_extension}{} (\textbf{unused}, present for backward compatibility) Allow the code to do a few extra iterations if it is close to converging when it runs out of iterations. A better approach is to set a convergence window.  \ \ (.false.)
+\item[allow\_underrelaxation]\hypertarget{allow_underrelaxation}{}  Allow the code to suppress the diffusion terms in the composition equations and then switch them on slowly as the code iterates.  \ \ (.false.)
+\item[allow\_overrelaxation]\hypertarget{allow_overrelaxation}{}    Allow the code to magnify the diffusion terms in the composition equations and then relax them to their normal value as the code iterates.  \ \ (.false.)
+\item[allow\_egenrelaxation]\hypertarget{allow_egenrelaxation}{}    Allow the code to fall back to the energy generation rate from the previous timestep and then smoothly transition to its current value as the code iterates. \ \ (.false.)
+\item[allow\_mdotrelaxation]\hypertarget{allow_mdotrelaxation}{}    Allow the code to suppress mass loss from stellar winds or RLOF and switch it on smoothly as the code iterates.\ \ (.false.)
+\item[allow\_avmurelaxation]\hypertarget{allow_avmurelaxation}{}   Together with use\_previous\_mu determines whether the current or the previous value of the mean molecular weight should be used to estimate the effect of thermohaline mixing. Normally best left alone. \ \ (.false.)
+\item[use\_previous\_mu]\hypertarget{use_previous_mu}{}        Use the previous value of the molecular weight rather than the current value when calculating the effect of thermohaline mixing (for numerical stability reasons).  \ \ (.true.)
+\item[off\_centre\_weight]\hypertarget{off_centre_weight}{}      Used to scale the weighting of terms in the difference equations. A large value means that the weighting is always central, a smaller value means that the weighting moves off-centre for mesh points where the timestep becomes of the order of the thermal conduction time. See Sugimoto (1970) for details.\ \ (1.0d16)
+\end{description}
+
+
+
+
+\subsection{Accuracy}
+\label{sec:initdat:accuracy}
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[EP(1) -- (3)] also known as \texttt{EPS}, \texttt{DEL}, \texttt{DH0}.  They determine how the code behaves when the mean modulus change in \texttt{DH} in the latest iteration equals \texttt{ERR} (see Writeup, section~1.6):
+\item[EPS]\hypertarget{eps}{} The accuracy to which SOLVER is required to solve the equations; if \texttt{ERR} $<$ \texttt{EPS}, the model has converged.   \ \  ($10^{-6}$)
+\item[wanted\_eps]\hypertarget{wanted_eps}{} The desired accuracy. The solver will aim for an accuracy of \texttt{wanted\_eps} $<$ \texttt{ERR} $<$ \texttt{EPS}.  This has no effect if \texttt{wanted\_eps} $\leq$ \texttt{EPS}. \ \  (1.0d-8)
+\item[DEL]\hypertarget{del}{} If \texttt{ERR} $>$ \texttt{EPS}, the corrections applied to \texttt{DH} are reduced by the factor \texttt{DEL}/\texttt{ERR}.   \ \  ($10^{-2}$)
+\item[DH0]\hypertarget{dh0}{} Variation in \texttt{H} to compute numerical derivatives. \ \  ($10^{-7}$)
+\item[CDC(1) -- (5):]\hypertarget{cdc}{} CDD is the mean increment, r.m.s.-wise, that you would like in one timestep.  Different evolutionary phases have different CDD's (identified here by name rather than by number):
+  \begin{description}
+  \item[cdc\_ms:]\hypertarget{cdc_ms}{}  CDD = cdc\_ms, between ZAMS and core hydrogen 0.04 (corresponding to the beginning of the hook in stars above $\sim 1.2\mathrm{M}_\odot$). (0.04 or 0.01)
+  \item[cdc\_ems:]\hypertarget{cdc_ems}{}  CDD = cdc\_ms * cdc\_ems, between the beginning of the hook and hydrogen exhaustion. The purpose is to reduce the timestep so that the hook is properly resolved. (0.15 or 1.0)
+  \item[cdc\_hg:]\hypertarget{cdc_hg}{}  CDD = cdc\_ms * cdc\_hg, between core hydrogen exhaustion and the base of the giant branch. The intention is to increase the timestep during the Hertzsprung gap. (3.0 or 1.0)
+  \item[cdc\_1dup:]\hypertarget{cdc_1dup}{}  CDD = cdc\_ms*cdc\_1dup, during first dredgeup (1DUP) on the giant branch.  (0.10 or 1.0)
+  \item[cdc\_hec:]\hypertarget{cdc_hec}{}  CDD = cdc\_ms*cdc\_hec, for evolution during core He burning.  (0.0625 or 0.25)
+  \item[cdc\_hes:]\hypertarget{cdc_hes}{}  CDD = cdc\_ms*cdc\_hes, for further evolution until the He shell nearly catches up with the H shell.  (0.25 or 1.0)
+  \item[cdc\_dblsh:]\hypertarget{cdc_dblsh}{}  CDD = cdc\_ms*cdc\_dblsh, for double-shell-burning. The intention is to either make the timestep large and skip over the thermal pulsing phase (if $\ge1$), or to cut back the timestep and resolve the thermal pulses (if $< 1$). (1.0 or 4.0)
+  \item[cdc\_rlof:]\hypertarget{cdc_rlof}{}  CDD = CDD*cdc\_rlof, to reduce the timestep if the system is moving closer to Roche lobe overflow (RLOF). The criterion is that the star is close to filling its Roche lobe and expanding. (0.05 or 1.0) 
+  \item[cdc\_rlof\_reduce:]\hypertarget{cdc_rlof_reduce}{}  CDD = CDD*cdc\_rlof\_reduce, to keep the timestep smaller while the system detaches after RLOF. The criterion is that the star is close to filling its Roche lobe and shrinking. (0.25 or 1.0)
+  \end{description}
+\end{description}
+
+
+
+
+\subsection{Equations, variables and boundary conditions}
+\label{sec:initdat:eqvarbc}
+
+See also Writeup, section~1.5
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[KE1, KE2]\hypertarget{ke1}{}\hypertarget{ke2}{} The number of first and second order difference equations respectively
+\item[KE3]\hypertarget{ke3}{} Subset of KE1 that involves 3 rather than 2 adjacent mesh points (not yet used, keep 0)
+\item[KBC]\hypertarget{kbc}{} The number of boundary conditions
+\item[KEV]\hypertarget{kev}{} The number of eigenvalues
+\item[KFN]\hypertarget{kfn}{} The number of `intermediate functions'
+\item[JH1 -- JH3]\hypertarget{jh1}{}\hypertarget{jh2}{}\hypertarget{jh3}{} Used for debugging purposes
+\end{description}
+
+
+
+
+See also Writeup, section~1.5
+\hypertarget{kd1}{}
+\begin{description}
+%\item[]\hypertarget{}{}
+%\item[KD(120)] Three lots of 40 integers (2 lines of 20 each), determining which variables, difference equations and boundary conditions are used and in which order:
+\item[kp\_var]\hypertarget{kp_var}{} Determines which and in which order the \hyperlink{indvars}{independent variables} are used (max 40 integers); a.k.a.\ \texttt{id(11:50)}, \texttt{ig(11:50)} in \eg\ \texttt{solver()}.
+\item[kp\_eqn]\hypertarget{kp_eqn}{} Determines which and in which order the \hyperlink{difeqs}{difference equations} are used (max 40 integers); a.k.a.\ \texttt{id(51:90)}, \texttt{ig(51:90)} in \eg\ \texttt{solver()}.
+\item[kp\_bc]\hypertarget{kp_bc}{} Determines which in which order the \hyperlink{boundcs}{boundary conditions} are used (max 40 integers); a.k.a.\ \texttt{id(91:130)}, \texttt{ig(91:130)} in \eg\ \texttt{solver()}.
+\end{description}
+
+
+
+
+\hypertarget{kd2}{}The same contents as \hyperlink{kd1}{lines 5-11}, not currently used. See the end of section~1.5 of Writeup.
+
+
+
+
+
+
+\subsection{Equation of state}
+\label{sec:initdat:eos}
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[KCL(1) -- (7)] also known as KCL, KION, KAM, KOP, KCC, KNUC, KCN:
+\item[KCL]\hypertarget{kcl}{} Unity includes the Coulomb correction to pressure etc; zero suppresses it.\ \ (1)
+\item[KION]\hypertarget{kion}{} EoS does the ionisation of the first KION elements in the list H, He, C, N, O, Ne, Mg, Si, Fe. 
+  No other elements are included. KION = 5 is about optimal. Do not try 9.\ \ (5)
+  % \item[KAM]\hypertarget{kam}{} Not currently used
+\item[KOP]\hypertarget{kop}{} If unity, code should use spline interpolation in tables of opacity; if zero, simple bi-linear interpolation \ \ (1)
+  % \item[KCC]\hypertarget{kcc}{} Not currently used
+  % \item[KNUC]\hypertarget{knuc}{} Not currently used
+\item[KCN]\hypertarget{kcn}{} If 0, gives standard nuclear network. If 1, gives a CNO-equilibrium fudge for ZAMS models: see FUNCS1\ \  (0)
+\item[eos\_include\_pairproduction]\hypertarget{eos_include_pairproduction}{} Should the equation-of-state include the effects of pair production?  
+  This is only important in the very late burning stages of very massive stars. Positrons are only calculated if their degeneracy parameter $\geq$ -15.0 --- otherwise they are negligible anyway.  \ \ (.false.)
+\end{description}
+
+
+
+
+\subsection{Nucleosynthesis}
+\label{sec:initdat:nucleosynthesis}
+
+\begin{description}
+  % \item[]\hypertarget{}{}
+\item[CH]
+  \hypertarget{ch}{}
+  value for initialising $X(^{1}\mathrm{H})$ as a fraction of the \emph{total composition}; 
+    only used for ZAMS models, with \hyperlink{jch}{JCH} = 4.  The default value, \texttt{CH} $= -1$,
+    tells the code to use the value provided with the ZAMS model.
+    For some (lower?) metallicities and some initial masses ($M\sim0.8\,M_\odot$?) the ZAMS model may not converge.
+    In such a case setting \texttt{ML1} to the nearest value for which the ZAMS model converges, and \texttt{SM} to the 
+    desired mass (in \hyperlink{initrun}{\texttt{init.run}}) may help out. \ \ (-1.0) 
+\item[CC, CN, CO, CNE, CMG, CSI, CFE]
+  \hypertarget{cc}{}\hypertarget{cn}{}\hypertarget{co}{}\hypertarget{cne}{}\hypertarget{cmg}{}\hypertarget{csi}{}\hypertarget{cfe}{} 
+  values for initialising $X(^{12}\mathrm{C})$, ... $X(^{56}\mathrm{Fe})$, as fractions of the 
+  \emph{total metallicity Z} (= CZS in \texttt{input/phys.z* (fort.20)}); only used for ZAMS models, with \hyperlink{jch}{JCH} = 4.
+  \ \ (0.176, 0.052, 0.502, 0.092, 0.034, 0.072, 0.072) 
+\item[kr\_nucsyn]\hypertarget{kr_nucsyn}{} Number of allowed iterations for the nucleosynthesis code  \ \ (60)
+\end{description}
+
+
+
+
+
+\subsection{Rotation}
+\label{sec:initdat:rotation}
+
+See also \texttt{start\_with\_rigid\_rotation} in \hyperlink{initrun}{\texttt{init.run}}.
+
+\begin{description}
+  % \item[]\hypertarget{}{}
+\item[rigid\_rotation]\hypertarget{rigid_rotation}{}  Use rigid rotation, or differential rotation?  \ \ (.true.)
+\end{description}
+
+
+
+
+\subsection{Stellar structure}
+\label{sec:initdat:stellarstructure}
+
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[KTH(1) -- (4), \emph{alias} KTH -- KZ:]
+\item[KTH]\hypertarget{kth}{} $\epsilon_\mathrm{th}$ = KTH $*$ (T DS/Dt); so you can ignore T DS/Dt if you want \ \ (1 or 0) 
+\item[KX]\hypertarget{kx}{} D$X(^1\mathrm{H})$/Dt = KX $*$ (burning rate of $^1\mathrm{H}$); so you can ignore the composition change while keeping the energy production (1 or 0)
+\item[KY]\hypertarget{ky}{} The same, for $^4$He (1 or 0)
+\item[KZ]\hypertarget{kz}{} The same, for $^{12}$C and $^{16}$O (1 or 0)
+\end{description}
+
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[CALP]\hypertarget{calp}{} The mixing-length ratio (2.0)
+\item[CU]\hypertarget{cu}{} Along with \hyperlink{cos}{COS} and \hyperlink{cps}{CPS}, a `convective overshooting' parameter, see \hyperlink{crd}{CRD}. \ \ (0.1)
+\item[COS]\hypertarget{cos}{} A convective overshooting parameter for H-burning cores, see \hyperlink{crd}{CRD}.  Zero implies no overshooting. \ \ (0.12)
+\item[CPS]\hypertarget{cps}{} as COS, but for He-burning cores. \ \ (0.12)
+\item[CRD]\hypertarget{crd}{} The diffusion coefficient $\sigma$ for convective mixing is taken to be CRD times the `legitimate' rate from 
+  mixing-length theory; except that an approximate multiple of $\left[\nabla_r-\nabla_a\right]^{1/3}$ is replaced 
+  by the same multiple of $\left[\nabla_r-\nabla_a+\nabla_\mathrm{OS}\right]^2$, where
+  $$\nabla_\mathrm{OS}\ \equiv\ {\mathrm{COS}\over \left(2.5+20\beta_*+16\beta_*^2\right) \,\left(\mathrm{CU}\,\cdot\,\partial\log m/\partial\log P+1\right)}, ~~~ \beta_*\ \equiv{P_\mathrm{rad} \over P_\mathrm{gas}}.$$
+  The usual CRD is $10^{-2}$ or $10^{-4}$.
+\item[CXB]\hypertarget{cxb}{} Defines the boundary of a core to be at $X(^1\mathrm{H})$ or $X(^4\mathrm{He})$ = CXB; for printout and envelope binding energy  (0.15)
+\item[CGR]\hypertarget{cgr}{} Defines the boundary between a convection zone and a semiconvection zone, for printout purposes only, to be at $\nabla_r - \nabla_a + \nabla_\mathrm{OS}$ = CGR (0.001)
+\item[CEA]\hypertarget{cea}{} A constant energy rate \hyperlink{enc}{ENC} can be added to 
+  $\epsilon_\mathrm{nuc}+\epsilon_\mathrm{th}-\epsilon_\nu$. An increasing ENC can push a star back from the
+  ZAMS to the Hayashi track. CEA and \hyperlink{cet}{CET} determine how ENC changes with time  (1.0E2)
+\item[CET]\hypertarget{cet}{} The equation for the growth of \hyperlink{enc}{ENC} with time is $d\,\mathrm{ENC}/dt$ = ENC$\times$CET$\times$(1 -- ENC/CEA), so that ENC 
+  increases exponentially on the assigned timescale 1/CET (yr), until saturating at  ENC $\sim$ \hyperlink{cea}{CEA}. (1.0E-6)
+\end{description}
+
+
+
+\subsection{Mass loss}
+\label{sec:initdat:massloss}
+
+Individual mass loss recipe switches.  These also turn on recipes when smart\_mass\_loss is used, although that does store its own set of mass loss options (to keep it more modular).
+
+At the surface, 
+$$ \dot{M} = -~\mathrm{CMT} \cdot \xi ~~-~~ \mathrm{CMS} \cdot \left[ \log (r/ r_\mathrm{lobe})\right]^3
+~~+~~ \mathrm{CMI} \cdot m ~~-~~ \mathrm{CMR} \cdot 1.3 \times 10^{-5}\cdot L\cdot m \cdot \vert E_\mathrm{BE}\vert $$
+$$-~~ \mathrm{CMJ} \cdot \dot{M}_\mathrm{JNH} ~~-~~ \mathrm{CML} \cdot \zeta (L, r, m, P_\mathrm{rot}) $$
+($\left[X\right] \equiv X$ if $X>0$ and 0 if $X<0$).  The equation above is no longer complete, as new wind mass-loss prescriptions
+have been added, as described in the next subsection.
+See Sect.\,\ref{sec:windmassloss} for a detailed description of the parameters CMR, CMJ and CML, which deal with \emph{wind} 
+mass loss, and Sect.\,\ref{sec:masstransfer} for the parameters CMT and CMS, which describe the mass \emph{transfer}.
+
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[CMI]\hypertarget{cmi}{} a constant mass-gain/loss rate, for running up or down the ZAMS, (yr$^{-1}$)  \ \ (0.0, $\pm$ 5.0D-9 or $\pm$1.0D-6)
+\item[cmi\_mode]\hypertarget{cmi_mode}{} Changes the interpretation of CMI. If cmi\_mode = 1, then CMI represents a time scale for exponential mass-gain/loss ($\dot{M} = M \cdot \mathrm{CMI}$). If cmi\_mode = 2, then CMI represents a mass-gain/loss rate in solar masses per year. \ \  (1)
+\end{description}
+
+\subsubsection{Wind mass loss}
+\label{sec:windmassloss}
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[smart\_mass\_loss]\hypertarget{smart_mass_loss}{} Turn on the smart-mass-loss routine, which picks an appropriate recipe depending on 
+  the stellar parameters. This is an alternative for the De Jager rate and replaces it when smart\_mass\_loss is switched on. \ \ (0.0 (off))
+\item[CMR]\hypertarget{cmr}{} Multiplier for a Reimers-like mass-loss rate: 
+  $\dot{M} = \mathrm{CMR} \times M \times \max\left(\frac{1.3\times10^{-5}\,L}{U_\mathrm{bind}},\frac{10}{\tau_\nu}\right)$ \ \ (0.0 or 0.2--1.0)
+\item[CMJ]\hypertarget{cmj}{} Multiplier for the De Jager mass-loss rate for luminous stars (de Jager et al 1988)  \ \ (0.0 or 1.0)
+\item[zscaling\_mdot]\hypertarget{zscaling_mdot}{} Scaling with metallicity applied to De Jager mass-loss rate in \texttt{funcs1}  \ \ (0.8)
+\item[CMV]\hypertarget{cmv}{} Multiplier for the Vink mass-loss rate
+\item[CMK]\hypertarget{cmk}{} Multiplier for the Kudritzki 2002 mass-loss rate
+\item[CMNL]\hypertarget{cmnl}{} Multiplier for the Nugis \& Lamers  mass-loss rate (for Wolf-Rayet stars)
+\item[CMRR]\hypertarget{cmrr}{} Multiplier for the real Reimers mass-loss rate
+\item[CMVW]\hypertarget{cmvw}{} Multiplier for the Vasiliadis \& Wood (1993ApJ...413..641V) mass-loss rate (superwind for late AGB stars)
+\item[CMSC]\hypertarget{cmsc}{} Multiplier for the Schr\"oder \& Cuntz mass-loss rate
+\item[CMW]\hypertarget{cmw}{} Multiplier for the Wachter et al.\ (2002A\&A...384..452W) mass-loss rate (superwind for late AGB stars)
+\item[CMAL]\hypertarget{cmal}{} Multiplier for Achmad \& Lamers the mass-loss rate (for A supergiants)
+  % \item[CM]\hypertarget{cm}{} Multiplier for the mass-los rate
+\item[cphotontire]\hypertarget{cphotontire}{} Switch to include photon tiring  \ \ (0.0)
+\end{description}
+
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[CML]\hypertarget{cml}{} A mass-loss rate as obtained from a simplistic dynamo theory  \ \ (0.0 or 1.0)
+\item[CHL]\hypertarget{chl}{} A factor multiplying the rate of ang. mom. loss associated with the rate of mass loss $\zeta$, according to the same dynamo model.\ \ (0.0 or 1.0)
+\end{description}
+
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[cmdotrot\_hlw]\hypertarget{cmdotrot_hlw}{} (Multiplier for?) rotationally enhanced mass loss rate by Heger, Langer \& Woosely Set at most one of these!
+\item[cmdotrot\_mm]\hypertarget{cmdotrot_mm}{} (Multiplier for?) rotationally enhanced mass loss rate by Maeder \& Meynet.  Set at most one of these!
+  % \item[]\hypertarget{}{} 
+\end{description}
+
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[CTF]\hypertarget{ctf}{} A factor multiplying an expression for the rate of tidal friction. (0.0 or 0.01)
+\item[CLT]\hypertarget{clt}{} A coefficient used in the estimation of heat flux between components in contact. It does not really work yet (or does it?).
+\end{description}
+
+\subsubsection{Mass transfer}
+\label{sec:masstransfer}
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[CMT]\hypertarget{cmt}{} one of two versions of MT by RLOF. CMS \& CMT are \emph{alternatives}; set one of them to zero \ \ 
+(0.0, or 1.0D-2--1.0D2 for stars of increasing mass (?))  For contact binaries, CMT is preferred (or even mandatory).
+\item[CMS]\hypertarget{cms}{} one of two versions of MT by RLOF. CMS \& CMT are \emph{alternatives}; set one to zero \ \ (0.0, or 1.0D0 -- 1.0D4).
+A too-high value can crash the model at the onset of MT.  Use CMT for contact binaries.
+
+\item[cmtel]\hypertarget{cmtel}{} Eddington-limited accretion factor (depends on the stellar parameters) \ \  (0.0d0 or 1.0d0)
+\item[cmtwl]\hypertarget{cmtwl}{} Angular-momentum limited accretion factor (depends on the stellar parameters) \ \ (0.0d0 or 1.0d0)
+\item[ccac]\hypertarget{ccac}{} Switch for composition accretion \ \  (0.0d0)
+\item[cgrs]\hypertarget{cgrs}{} Switch for gravitational settling  \ \ (0.0d0)
+\end{description}
+
+
+
+
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[CPA]\hypertarget{cpa}{} `partial accretion': the fraction of one star's wind that is accreted by the other.  (0.0)
+\item[CBR]\hypertarget{cbr}{} `bipolar re-emission': the fraction of material accreted by a star that is ejected in bipolar jets. Needed for CVs, LMXBs. (0.0) 
+\item[CSU]\hypertarget{csu}{} `spin-up', specifically of the gainer due to accretion. CSU is the specific angular momentum (AM) relative to orbital (OAM), taken out of the orbit 
+  by material leaving the L1 point, acquiring AM due to Coriolis force, and landing on the other star - so OAM is converted to gainer's internal AM.
+  Does not seem to work properly... yet. (0.0)
+\item[CSD]\hypertarget{csd}{} `spin-down'; the same process also spins down the loser, I suppose, though not by as much. Does not seem to work properly... yet. (0.0)
+\item[CDF]\hypertarget{cdf}{} this is used to convert a step-function into a `smoothed' step function: see Writeup p.27. (0.01)
+\item[CGW]\hypertarget{cgw}{} A switch to turn gravitational radiation on and off \ \ (0.0 or 1.0)
+\item[CSO]\hypertarget{cso}{} A switch to turn spin-orbit coupling on and off \ \ (0.0 or 1.0)
+\item[CMB]\hypertarget{cmb}{} A multiplication factor to determine the strength of an alternative magnetic braking law, currently the one by 
+  Rappaport, Verbunt \& Joss, 1983. \ \ (0.0 -- 1.0)
+  % \item[]\hypertarget{}{}
+\end{description}
+
+
+
+\subsection{Mixing}
+\label{sec:initdat:mixing}
+
+\begin{description}
+  % \item[]\hypertarget{}{}
+\item[artmix]\hypertarget{artmix}{} Artificial mixing coefficient [cm$^2$/s]. Set it to 1.0 to mix the entire star. \ \ (0.0d0)
+\item[csmc]\hypertarget{csmc}{} Semi-convection efficiency, after Langer (1991) \ \ (4.0d-2)
+\item[cdsi]\hypertarget{cdsi}{} Switch for the dynamical shear instability \ \ (1.0d0)
+\item[cshi]\hypertarget{cshi}{} Switch for the solberg-hoiland instability (not implemented) \ \ (1.0d0)
+\item[cssi]\hypertarget{cssi}{} Switch for the secular shear instability \ \ (1.0d0)
+\item[cesc]\hypertarget{cesc}{} Switch for the Eddington-sweet circulation \ \ (1.0d0)
+\item[cgsf]\hypertarget{cgsf}{} Switch for the goldreich-schubert-fricke instability \ \ (1.0d0)
+\item[cfmu]\hypertarget{cfmu}{} Weight of mu gradient in rotational instabilities [see Heger's thesis page 36 and Pinsonneault] \ \ (5.0d-2)
+\item[cfc]\hypertarget{cfc}{} Ratio of turbulent viscosity over the diffusion coefficient [see Heger's thesis page 35] \ \ (3.3d-2)
+\item[convection\_scheme]\hypertarget{convection_scheme}{} \remark{To do}  \ \ (1)
+\end{description}
+
+
+
+
+
+\subsection{Cetera}
+\label{sec:initdat:cetera}
+
+\begin{description}
+%\item[]\hypertarget{}{}
+\item[enc\_parachute]\hypertarget{enc_parachute}{}
+  Emergency energy-generation term, normally set to 0. This cannot be set from the input file. It will be set by \texttt{remesh} if there is no nuclear energy generation in the initial model at all. 
+  In that case, the first iteration(s) will return LOM = 0.0 throughout the star because the thermal-energy term is initially 0 as well. this is a numerical fudge to remove the resulting singularity. 
+  This term will be set to L/M (constant energy generation throughout the star) and will be reduced to 0 by \texttt{printb}.  \ \ (0.0)
+\end{description}
+
+

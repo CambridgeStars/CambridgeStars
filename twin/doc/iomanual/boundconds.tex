@@ -1,0 +1,80 @@
+\hypertarget{boundcs}{}
+\section{The boundary conditions}
+\label{sec:boundcs}
+
+\def\mdtddw{{\vert\dot{M}_\mathrm{DDW}}}
+\def\mdtjnh{{\vert\dot{M}_\mathrm{JNH}\vert}}
+\def\mdtrlf{{\vert\dot{M}_\mathrm{RLOF}\vert}}
+\def\pip{\,$\cdot$\,}
+
+
+The boundary conditions are selected in \hyperlink{kp_bc}{\texttt{kp\_bc}} in \texttt{init.dat}
+and are also known as \texttt{id(91:130)}, \texttt{ig(91:130)} in \eg\ \texttt{solver()}.
+
+
+\subsection{Composition}
+\begin{description}
+\item[(1a, 2a, 3a, 4a, 5a, 1b, 2b, 3b, 4b, 5b)]
+\item[]  $\sigma_{\mathrm{k} \pm 1/2}(X_\mathrm{k } - X_{\mathrm{k}\pm 1}) = (\dot{X}_\mathrm{k } + R_\mathrm{nuc, k }) \cdot (m_\mathrm{k } - m_{\mathrm{k}\pm 1})$ 
+\end{description}
+\noindent making 10 such equations in all.
+
+
+\subsection{At the surface (K = 1)}
+\begin{description}
+\item[(6a)] $dM/dt\ =\ -$ CML\pip$\mdtddw(r,m,L,P_\mathrm{rot})\vert$ -- CMJ\pip$\mdtjnh$ -- CMR\pip$1.3\times 10^{-5}Lm/ \vert E_\mathrm{B}\vert$ 
+                      -- CMS\pip$[\ln(R/R_\mathrm{L})]^3$ -- CMT\pip$\xi$ + CMI\pip$M$
+
+% 7c and 8c were swapped until 19/08/2011:
+\item[(7c)]  Pressure: $\frac{3}{2} P_\mathrm{gas} + \frac{3}{4} P_\mathrm{rad} \approx g/\kappa$
+\item[(8c)]  Luminosity/temperature: $L \  = \  \pi a c r^2 T^4$
+
+\item[(9c)]  $\phi = $ (gravitational) potential
+\item[(10c)] $d(I\Omega)/dt = \ldots$, the rate of change of angular momentum of the star, carried away by stellar wind $\mdtddw\vert$ or lost to the orbit by tidal 
+             friction ($\Omega\equiv 2\pi/P_\mathrm{rot}$)
+\item[(11c)] $\phi_s= \phi$: (gravitational) potential at the surface
+\item[(17c)] $dH_\mathrm{orb}/dt= \ldots$, rate of change of \emph{orbital} angular momentum, including tidal friction which exchanges AM between spin and orbit
+\item[(18c)] $de/dt =\ldots$, rate of circularisation due to tidal friction
+\item[(20c)] $dM_\mathrm{B}/dt =$ sum of the winds from both stars; $M_\mathrm{B}$ is the \emph{binary} mass
+\end{description}
+
+
+\subsection{At the centre (K = KH)}
+
+(actually one mesh point from the centre)
+
+\begin{description}
+\item[(6d)]    $m = 0$
+\item[(7d)]    $L = 0$
+\item[(8d)]    $r = 0$
+\item[(9d)]    $I = 0$ 
+\item[(19d)]   $\xi = 0$
+
+%was:
+%\item[(6d)]    $ m^{2/3} \  = \  -2\mp/3m^{1/3}$
+%\item[(7d)]    $L = (\epsilon - T \dot{S})m$
+%\item[(8d)]    $r^2 \  = \  -\mp/2\pi r\rho$
+%\item[(9d)]    $I = 0$ (ought to be $-2/3 \mp r^2$, but that's very small)
+%\item[(17d)]   $F = 0$.
+\end{description}
+
+
+\begin{description}
+\item[(13)]  \remark{CHECK ???}
+\item[(20)]  \remark{CHECK ???}
+\item[(25--29)]  \remark{CHECK ???}
+%\item[(25)]  \remark{CHECK ???}
+%\item[(26)]  \remark{CHECK ???}
+%\item[(27)]  \remark{CHECK ???}
+%\item[(28)]  \remark{CHECK ???}
+%\item[(29)]  \remark{CHECK ???}
+\item[(30--33)]  \remark{CHECK ???} (2x)
+%\item[(30)]  \remark{CHECK ???} (2x)
+%\item[(31)]  \remark{CHECK ???} (2x)
+%\item[(32)]  \remark{CHECK ???} (2x)
+%\item[(33)]  \remark{CHECK ???} (2x)
+\item[(34)]  \remark{CHECK ???}
+\item[(35)]  \remark{CHECK ???}
+\item[(37)]  \remark{CHECK ???}
+\end{description}
+

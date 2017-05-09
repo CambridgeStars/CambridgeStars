@@ -1,0 +1,99 @@
+\section{Creating your first run}
+\label{sec:firstrun}
+
+%See also \href{http://www.phys.uu.nl/~glebbeek/starswiki/bin/view.cgi/Main/GetStarted}{http://www.phys.uu.nl/$\sim$glebbeek/starswiki/bin/view.cgi/Main/GetStarted}
+
+\subsection{Obtaining and updating the code}
+\label{sec:obtaining}
+To obtain the code, use the \texttt{svn checkout} command and address as you received them.
+To update your local version of the code, \texttt{cd} into the \texttt{stars} directory and type \texttt{svn update}.  
+To update to a specific (\emph{e.g.}\ the latest stable) version, use \texttt{svn update -r<version number>}. 
+Don't forget to recompile the code after an update (see Sect.\,\ref{sec:compiling}).
+A concise svn ``howto'' listing the basic commands can be found here: \\
+\href{http://tiny.cc/svnhowto}{\texttt{http://tiny.cc/svnhowto}}
+
+
+\subsection{Compiling the code}
+\label{sec:compiling}
+\begin{enumerate}
+
+\item \texttt{cd} into the directory \texttt{stars/}. This is the directory that contains the \texttt{code} subdirectory.
+
+%\item Set the environment variable \texttt{FORT} to your favourite compiler, \emph{e.g.}\ \texttt{export FORT="gfortran"}.  Again you could add this to your start-up files and check the result.
+
+\item If you're running on a computer cluster, you probably want to link the executable \emph{statically}.  
+  To do this, edit the file \texttt{CMakeLists.txt} and set the option \texttt{WANT\_STATIC} to \texttt{on}.
+
+\item Configure and compile (starting from the directory \texttt{stars/}).
+  %\begin{itemize}
+  %\item 
+    Use CMake (type \texttt{cmake --version} to see whether CMake is installed):
+    \begin{enumerate}
+    %\item \texttt{rm -rf build/  ~~\#(if the directory build/ already exists)} \label{step_rmdir}
+    \item \texttt{mkdir build \&\& cd build} \label{step_mkdir}
+    \item \texttt{cmake~..} \label{step_cmake}
+    \item \texttt{make} \label{step_make}
+    \item \texttt{cd -}
+    \end{enumerate}
+    If you updated the code (and \texttt{build/} already exists) and compilation doesn't 
+    work, you should type \texttt{make clean} before step~\ref{step_cmake}.  If the code 
+    \emph{still} doesn't compile, do \texttt{rm -rf build/} before step~\ref{step_mkdir}.
+    Note that at step~\ref{step_cmake}, CMake chooses a compiler.  To overrule this, execute 
+    \emph{e.g.}\ \texttt{FC=gfortran~cmake~..} instead.
+    Step~\ref{step_make} may produce some remarks and should produce the binary executable 
+    \texttt{code/ev}.
+%  \item old method \textbf{(now deprecated!)}:
+%    \begin{enumerate}
+%    \item \texttt{./configure.pl}
+%    \item \texttt{make depend}
+%    \item \texttt{make} --- This may produce some warnings and should produce the binary executable \texttt{code/ev}.
+%    \end{enumerate}
+  %\end{itemize}
+
+\item \label{item:evpath} It is very useful to set the environment variable to the path of the \texttt{stars/} directory, \emph{e.g.}\ \\
+  \texttt{export evpath="/home/user/codes/stars/"}.\footnote{I'm assuming you're using \texttt{bash}.  If you're using \texttt{csh}, replace \texttt{export a="b"} with \texttt{setenv a "b"}
+  and \texttt{$\sim$/.bashrc} with \texttt{$\sim$/.cshrc}}\footnote{Some compilers, \emph{e.g.}\ \texttt{gfortran} don't accept \texttt{$\sim$/} but need \emph{e.g.}\ \texttt{/home/user/}.}
+  This line should probably go into your \texttt{$\sim$/.bashrc}.  Check with \texttt{echo \$evpath}.
+
+\item \label{item:path} It is very useful to put \texttt{ev} in your path.  You could do \emph{one} of these:
+  \begin{enumerate}
+  \item \texttt{PATH=\$\{PATH\}:$\grave{~}$echo \$\{evpath\}/code$\grave{~}$}  (to add the directory where ev sits to your path. Again, you should add this to your \texttt{$\sim$/.bashrc}).
+  \item \texttt{cp code/ev $\sim$/bin/} (if \texttt{$\sim$/bin/} is in your path)
+  \end{enumerate}
+\end{enumerate}
+
+
+
+\subsection{Running the code}
+\label{sec:run}
+
+\remark{Change this to using \texttt{stars\_standard/} instead.}
+
+\begin{enumerate}
+\item I assume you're still in the \texttt{stars/} directory.
+\item \texttt{cd run; ls} ---  This contains number of subdirectories with different example runs.  Let's try the second one and copy the contents in order to keep the original:
+\item \texttt{cp -r 02-single/ test-02 \&\& cd test-02/ \&\& ls} --- The directory contains an example \texttt{init.dat} and two example \texttt{init.run} files.  
+  You need one of each to start a run.  Let's use \texttt{init.run\_m4}, which evolves a $4\,M_\odot$ star:
+\item \texttt{cp init.run\_m4 init.run}
+\item We're all ready to start the code.  The default syntax is: \\
+  \texttt{<path>/ev <output-file base name> <metallicity> <stars directory>} \\
+  and could be \emph{e.g.}: \\
+  \texttt{$\sim$/codes/stars/code/ev star 02 $\sim$/codes/stars/} \\
+  which is a little annoying, since your code directory is probably not going to move around your hard disc a lot.  Hence step \ref{item:path} in section~\ref{sec:compiling},
+  which allows us to remove the path from the \texttt{ev} command and step \ref{item:evpath} with which we can leave out the last command-line option altogether.
+  Using those steps thus reduces things to: \\
+  \texttt{ev star 02} \\
+  The remaining options mean that all my output files will be called \texttt{star.*} and that I want to use solar metallicity (02 means $Z=0.02$, $Z=0.001$ would reduce to 001, etc.
+  In fact, $Z=0.02$ is the default option, so I could leave it out and run my first model as: \\
+  \texttt{ev star}
+%\item \texttt{}
+\end{enumerate}
+
+
+
+\subsection{Stopping the code}
+\label{sec:stop}
+
+To terminate a running model properly, you type \texttt{echo 1 > fort.11} in the directory where the code is running.
+(Presumably, we'll want to replace \texttt{fort.11} with a proper file name at some point, to facilitate running
+and terminating different versions of the code in the same directory independently).

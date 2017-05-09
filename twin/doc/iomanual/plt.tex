@@ -1,0 +1,94 @@
+\section{file.plt\{1,2\}}
+\label{sec:plt}
+
+This file contains stellar evolutionary properties, for one structure model
+per line.  The first line contains the number of columns in the output block.
+The block currently contains 81 columns, with the following contents:
+
+\begin{enumerate}
+\item JMAD, Model number
+\item $t$, Age [yr] 
+\item $\Delta t$, time step [yr] 
+  
+\item $M$, stellar mass [$M_\odot$]
+\item $M_\mathrm{He}$, helium core mass [$M_\odot$] 
+\item $M_\mathrm{CO}$, carbon-oxygen core mass [$M_\odot$]  
+\item $M_\mathrm{ONe}$, oxygen-neon core mass [$M_\odot$]  
+  
+\item $\log R$, stellar radius [$R_\odot$]
+\item $\log L$, stellar luminosity [$L_\odot$] 
+\item $\log(T_\mathrm{eff})$, effective temperature [K] 
+\item $\log T_\mathrm{c}$, central temperature [K]
+\item $\log T_\mathrm{max}$, maximum temperature [K]
+\item $\log \rho_\mathrm{c}$, central density [g cm$^{-3}$] 
+\item $\log \rho_\mathrm{Tmax}$, density at $T=T_\mathrm{max}$ [g cm$^{-3}$] 
+\item $U_\mathrm{bind}$, binding energy of H envelope [erg/($1\,\Msun$)] \footnote{Multiply with $1.9891\times10^{33}$ to get ergs. The reason for this confusing solution is that values of $10^{40-50}$\,erg don't fit in a single-precision variable, and that the value may be negative so that a log is no option.\label{fn:be}}
+
+\item $L_\mathrm{H}$, luminosity by hydrogen burning [$L_\odot$]
+\item $L_\mathrm{He}$, luminosity by helium burning [$L_\odot$]
+\item $L_\mathrm{C}$, luminosity by carbon burning [$L_\odot$]
+\item $L_\nu$, neutrino luminosity [$L_\odot$]
+\item $L_\mathrm{th}$, luminosity by release of thermal energy [$L_\odot$]
+
+\item $P_\mathrm{rot}$, rotational period [days] 
+\item VK2, $K^2 ~\equiv~ \frac{I}{M\,R^2}$, with $I$ the moment of inertia
+\item $R_\mathrm{cz}$, Depth (?) of convective envelope [$R_*$]
+\item d$R_\mathrm{cz}$, Thickness (?) of convective envelope [$R_*$]
+\item TET, Convective turnover timescale
+\item RAF, Alfv\'en radius 
+\item BP, poloidal magnetic field
+
+\item $P_\mathrm{orb}$, orbital period [days] 
+\item FLR = $^e\log\left(R_*/R_\mathrm{rl}\right)$, relative Roche Lobe Radius, also called RLF
+\item F1, $\sim~\Phi_\mathrm{surf} - \Phi_\mathrm{L1}$ [erg] ?
+\item $\dot{M}$, total mass loss [$M_\odot$ yr$^{-1}$]
+\item $\dot{M}_\mathrm{wind}$, wind mass loss [$M_\odot$ yr$^{-1}$]
+\item $\dot{M}_\mathrm{mt}$, mass transfer rate [$M_\odot$ yr$^{-1}$]
+\item $H_\mathrm{orb}$, orbital angular momentum [10$^{50}$ g cm$^2$ s$^{-1}$] 
+\item d$H_\mathrm{orb}/dt$, total orbital angular momentum loss rate [10$^{50}$ g cm$^2$ s$^{-2}$]
+\item d$H_\mathrm{gw}/dt$, change in $H_\mathrm{orb}$ due to gravitational waves [10$^{50}$ g cm$^2$ s$^{-2}$]
+\item d$H_\mathrm{wi}/dt$, change in $H_\mathrm{orb}$ due to wind mass loss [10$^{50}$ g cm$^2$ s$^{-2}$]
+\item d$H_\mathrm{so}/dt$, change in $H_\mathrm{orb}$ due to spin-orbit coupling [10$^{50}$ g cm$^2$ s$^{-2}$]
+\item d$H_\mathrm{ml}/dt$, change in $H_\mathrm{spin}$ due to non-conservative mass transfer [10$^{50}$ g cm$^2$ s$^{-2}$]
+\item $M_\mathrm{comp}$, companion mass [$M_\odot$] 
+\item $e$, orbital ellipticity
+
+\setcounter{enumi}{41} 
+\item-- \,48. Surface abundances of: 42:H, 43:He, 44:C, 45:N, 46:O, 47:Ne, 48:Mg
+\setcounter{enumi}{48} 
+\item-- \,55. $T_\mathrm{max}$ abundances of: 49:H, 50:He, 51:C, 52:N, 53:O, 54:Ne, 55:Mg
+\setcounter{enumi}{55} 
+\item-- \,62. Central abundances of: 56:H, 57:He, 58:C, 59:N, 60:O, 61:Ne, 62:Mg
+\setcounter{enumi}{62} 
+\item-- \,68. Convection zone boundaries (\texttt{mcb}); $> 0$: beginning, $< 0$ end of zone (max. 3 sets)
+\setcounter{enumi}{68} 
+\item-- \,74. Semi-convection zone boundaries (\texttt{msb}); $> 0$: beginning, $< 0$ end of zone (max. 3 sets)
+\setcounter{enumi}{74} 
+\item-- \,80. Nuclear energy production zone ($\varepsilon_\mathrm{nuc} > \varepsilon_\mathrm{tresh} \sim 10 L_*/M_* $) boundaries (\texttt{mex}); $> 0$: beginning, $< 0$ end of zone (max.\ 3 sets)
+\setcounter{enumi}{80} 
+
+\item $Q_\mathrm{conv}$, the mass fraction of the convective envelope
+
+\item $P_\mathrm{c}$, central pressure [cgs]
+
+\item $P_\mathrm{rot,c}$, rotational period in the centre [s] 
+\footnote{The latest 2005 version, used at NU, has STRMDL in column 83 and column 89 as its last column.}
+
+\item $B\!E_0$, binding energy due to gravitational energy [erg/($1\,\Msun$)] $^{\ref{fn:be}}$
+\item $B\!E_1$, binding energy due to internal energy [erg/($1\,\Msun$)] $^{\ref{fn:be}}$
+\item $B\!E_2$, binding energy due to recombination energy [erg/($1\,\Msun$)] $^{\ref{fn:be}}$
+\item $B\!E_3$, binding energy due to $H_2$ association energy [erg/($1\,\Msun$)] $^{\ref{fn:be}}$
+
+\item $S_\mathrm{c}$, specific entropy in core [erg g$^{-1}$ K$^{-1}$]
+\item $S_{T=10^5K}$, specific entropy in the convective envelope at $T=10^5$K [erg g$^{-1}$ K$^{-1}$]
+
+\item $R_\mathrm{He}$, radius of the helium core [$\Rsun$]
+\item $R_\mathrm{CO}$, radius of the CO core [$\Rsun$]
+
+\item STRMDL, a structure model is stored (1.0) or not (0.0)
+
+\end{enumerate}
+
+
+
+

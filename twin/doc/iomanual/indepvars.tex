@@ -1,0 +1,64 @@
+\hypertarget{indvars}{}
+\section{The independent variables}
+\label{sec:indvars}
+
+The independent variables are selected in \hyperlink{kp_var}{\texttt{kp\_var}} in \texttt{init.dat}
+and are also known as \texttt{id(11:50)}, \texttt{ig(11:50)} in \eg\ \texttt{solver()}.
+In \emph{TWIN} mode, variables (25) to (40) are the same as (1) to (16), but for
+the companion star, while variables (17) to (24) are reserved for \emph{binary}
+parameters.
+
+
+
+\begin{description}
+\item[(1/25)]  $\ln f$ - a dimensionless quantity closely related to electron 
+degeneracy: for the case where electrons are non-degenerate and non-relativistic, 
+$f \sim \ 10^8 \rho/T^{3/2}$ 
+\item[(2/26)]  ln $T$ - logarithmic temperature (Kelvins)
+\item[(3/27)]  $X16$  - fractional abundance by mass of $^{16}$O
+\item[(4/28)]  $m$ - mass ($10^{33}\,$gm)
+\item[(5/29)]  $X1$    - the abundance of $^1$H
+\item[(6/30)]  $C$    - the gradient of mesh-spacing function $Q(f,T,m,r)$ with
+respect to mesh point number K. $C$ does not vary with $K$, the mesh-point number,
+            although it varies with time. It is in effect an eigenvalue
+\item[(7/31)]  ln $r$ - logarithmic radius ($10^{11}\,$cm)
+\item[(8/32)]  $L$    - luminosity ($10^{33}\,$erg/s). Not logged, because it
+                  may be negative
+\item[(9/33)] $X4$   - the abundance of $^4$He
+\item[(10/34)] $X12$  - the abundance of $^{12}$C
+\item[(11/35)] $X20$  - the abundance of $^{20}$Ne
+\end{description}
+
+For a more sophisticated binary, including mass loss, magnetic braking, 
+rotation (uniform but time-varying) and tidal friction, a further 7 variables 
+are stored:
+\begin{description}
+\item[(12/36)] $I$ - the moment of inertia of the interior material 
+($10^{55}\,$gm\,cm$^2$)
+\item[(13/37)] $P_\mathrm{rot}$ - the rotation period (days) of the star (here taken 
+to be independent of depth, so that it is an `eigenvalue', like $C$ above)
+\item[(14/38)] $\phi$ - the centrifugal-gravitational potential (ergs). 
+\item[(15/39)] $\phi_\mathrm{s}$ - the potential at the surface, minus the
+potential on the L1 surface (ergs); an `eigenvalue'.
+\item[(16/40)] $X14$ - fractional abundance by mass of $^{14}$N.
+
+
+\item[(17)] $H_\mathrm{orb}$ - the orbital angular momentum 
+($10^{50}\,$gm\,cm$^2$/sec); an `eigenvalue'.
+\item[(18)] $e$ - the eccentricity:  an `eigenvalue'.
+\item[(19)] $\xi$ - the flux of mass towards or away from the other star (formerly $F$)
+($10^{33}\,$gm/sec);
+a function of depth, but zero below the L1 surface.
+\item[(20)] $M_\mathrm{B}$ - the total mass of the binary; depleted by wind in either or both stars, but not by mass transfer between the stars. An `eigenvalue'.
+%\item[(21?)]
+\item[(22)] Variable MENC for artificial, mesh-dependent energy term
+\item[(23)] Variable MEA, related to MENC (Var.\,22) and luminosity \ldots?
+\item[(24)] Variable MET, related to MENC (Var.\,22) \ldots?
+
+\item[(41)] $X24$ - fractional abundance by mass of $^{24}$Mg.
+\item[(42)] $X28$ - fractional abundance by mass of $^{28}$Si.
+\item[(43)] $X56$ - fractional abundance by mass of $^{56}$Fe.
+
+\item[(44)] Total angular momentum.
+\end{description}
+

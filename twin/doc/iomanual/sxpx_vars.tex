@@ -1,0 +1,106 @@
+\section{Variables in SX and PX}
+\label{sec:sxpx}
+
+These quantities are calculated in \texttt{printb} and stored in the variables
+\texttt{SX} and \texttt{PX}.  In the loop over all meshpoints, \texttt{SX(J, IKK)} is the previous value 
+of \texttt{PX(J)}, from the previous mesh point.
+\texttt{IKK} runs from 1 to \texttt{NM}, the number of meshpoints, or from the centre to the 
+surface of the star.  (In the same loop, the variable \texttt{Q(1-24)} contains the values
+of \texttt{H(1-24,I)} for mesh point \texttt{I}, see Sect.\,\ref{sec:mod}).
+
+\begin{enumerate}
+\item $\psi$: degeneracy parameter ?
+\item P: Pressure
+\item $\rho$: Mass density
+\item T: Temperature 
+\item $\kappa$: Opacity
+\item $\nabla_\mathrm{ad}$: Adiabatic temperature gradient  $\left(\frac{\partial\log T}{\partial\log P}\right)_\mathrm{ad}$
+\item $\nabla$: True temperature gradient $\frac{d\log T}{d\log P}$
+\item $\nabla_\mathrm{rad} ~-~ \nabla_\mathrm{ad}$: Difference between the radiative and adiabatic $\nabla$'s
+\item M: Mass
+
+%10:
+\item H$^1$: Hydrogen abundance
+\item He$^4$: Helium abundance
+\item C$^{12}$: Carbon abundance
+\item N$^{14}$: Nitrogen abundance
+\item O$^{16}$: Oxygen abundance
+\item Ne$^{20}$: Neon abundance
+\item Mg$^{24}$: Magnesium abundance
+\item R: Radius 
+\item L: Luminosity 
+\item $E_\mathrm{th}$: Thermal energy generation rate
+
+%20:
+\item $E_\mathrm{nuc}$: Nuclear energy generation rate
+\item $E_\nu$: Energy loss rate in neutrinos 
+\item dM: Shell mass
+\item Diffusion coefficient for thermohaline mixing
+\item $\frac{n}{(n+1)} = \frac{d\log\rho}{d\log P}$: Homology invar.
+\item $U_\mathrm{hom} = \frac{d\log R}{d\log P}$: Homology invar.
+\item $V_\mathrm{hom} = \frac{d\log M}{d\log P}$: Homology invar.
+\item U: Internal energy 
+\item S: Entropy
+\item $L/L_\mathrm{edd}$: Luminosity relative to Eddington
+
+%30:
+\item $w_\mathrm{conv} \times l$, $w_\mathrm{conv}$: convective velocity, $l$: mixing length
+\item $\mu$: Mean molecular weight
+\item wt: ? 
+\item $\nu_\mathrm{e}$: $\frac{1}{\mu}$: per free electron
+\item $\nu_\mathrm{e,0}$: $\frac{1}{\mu_0}$: per all electrons
+\item $w_\mathrm{conv}$: convective velocity
+\item M.I.: Moment of Inertia
+\item $\phi$: centrifugal-gravitational potential
+\item $F_\mathrm{m}$: Mass flux towards or away from the other star
+\item DGOS: $\nabla_\mathrm{r} - \nabla_\mathrm{a} + \nabla_\mathrm{OS}$ modified Schwarzschild criterion: if $>0$: convection  (but Writeup says: not used...)
+
+%40:
+\item DLRK: Heat transfer due to differential rotation
+\item $\Delta$(enth): Difference in enthalpy between star 1 and 2
+\item XIK
+\item V$^2$: $\Delta\Phi_\mathrm{surf}$ between star 1 and 2
+\item FAC2  $\sim$ V$^2$?
+\item FAC1  $\sim$ V$^2$?
+\item Not used
+\item Not used
+\item Not used
+\item Not used
+
+%50:
+\item RPP: Reaction rate: pp chain effective 2p $\rightarrow$ 1/2 He4
+\item RPC: Reaction rate: effective C12 + 2 p $\rightarrow$ N14
+\item RPNG: Reaction rate: effective N14 + 2p $\rightarrow$ O16
+\item RPN: Reaction rate: effective N14 + 2p $\rightarrow$ C12 + He4
+\item RPO: Reaction rate: effective O16 + 2p $\rightarrow$ N14 + He4
+\item RAN: Reaction rate: effective N14 + 3/2 He4 $\rightarrow$ Ne20
+\item $C_p \mathrm{d}S / \mathrm{d} \log p$
+\item $\mathrm{d}L / \mathrm{d}k$
+\item LQ, advection term for luminosity equation
+\item $\omega$, rotation rate
+
+%60:
+\item $N^2$: Brunt-V\"ais\"al\"a frequency squared \remark{TODO: check this, the code suggests it's supposed to be the Richardson number, but this may be incorrect}
+\item $D_\mathrm{dsi}$ mixing coefficient for the dynamical shear instability
+\item $D_\mathrm{ssi}$ mixing coefficient for the secular shear instability
+\item $v_\mathrm{ES}$ velocity of Eddington-Sweet circulation
+\item $v_\mathrm{\mu}$ counter term for Eddington-Sweet circultion (``$\mu$-current'')
+\item $(4\pi r^2 \rho)^2 / m'$, conversion factor for diffusion coefficients \remark{CHECK}
+\item \remark{CHECK: SSSI? RIS?}
+\item \remark{TODO: ???}
+\item \remark{TODO: ???}
+\item \remark{CHECK: $d\mu$?}
+
+%70:
+\item \remark{CHECK: $d\omega$?}
+\item \remark{CHECK: Convection + artificial mixing}
+\item \remark{CHECK: Thermohaline mixing}
+\item \remark{CHECK: Solberg-Hoiland mixing}
+\item \remark{CHECK: Dynamical-shear mixing}
+\item \remark{CHECK: Secular-shear mixing}
+\item \remark{CHECK: Eddington-Sweet mixing}
+\item \remark{CHECK: Goldberg-Schubert-Fricke mixing}
+%\item 
+%\item 
+%80:
+\end{enumerate}

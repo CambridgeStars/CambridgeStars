@@ -1,0 +1,157 @@
+\section{file.out\{1,2\}}
+
+Note: this section is about \texttt{file.out1} and \texttt{file.out2}, 
+not \texttt{file.out}!
+
+During a stellar evolution run short summaries of the stellar parameters are written 
+into the files \texttt{file.out1} and \texttt{file.out2}. It can be useful to watch this file while 
+the code is running for example by typing \texttt{tail -f file.out1}.
+This will show the last 10 lines of the \texttt{file.out1} file and refresh when \texttt{file.out1} 
+changes (exit with \texttt{Ctrl-C}).
+The files start with a copy of \texttt{init.dat}. The rest of the file consists of 
+three different blocks of information:
+\begin{description}
+\item[Stellar snapshots:] summaries of the star at a certain model number, \emph{e.g.}\ 
+  its mass, age, central composition, etc.,
+\item[Stellar slices:] detailed summaries of the interior of the star, \emph{e.g.}\ $P$ 
+  $\rho$, $T$, etc., on every mesh point in the star,
+\item[Convergence info:] information on the convergence of the set of differential equations 
+  for each iteration.
+\end{description}
+
+How often these blocks of information are printed to the file can be set with the
+parameters \texttt{\hyperlink{kt1}{KT1}} -- \texttt{\hyperlink{kt5}{KT5}} in \texttt{init.dat}.
+
+
+
+\subsection{Stellar snapshots}
+
+\subsubsection*{Line 1:}
+\begin{description}
+\item[M:] Stellar mass [$M_\odot$]
+\item[Porb:] Orbital period [days]
+\item[xi:] Mass transfer rate [$M_\odot$ yr$^{-1}$]
+\item[tn:] Nuclear timescale
+\item[LH:] Luminosity by Hydrogen burning
+\item[P(cr):]
+\item[McHe:] Mass of Helium core
+\item[CXH:] Central H Abundance
+\item[CXHe:] Central He abundance
+\item[CXC:] Central C abundance
+\item[CXN:] Central N abundance
+\item[CXO:] Central O abundance
+\item[CXNe:] Central Ne Abundance
+\item[CXMg:] Central Mg abundance
+\item[Cpsi:] Central value of the electron degeneracy parameter
+\item[Crho:] Log Central density
+\item[CT:] Log Central Temperature
+\end{description}
+
+
+
+\subsubsection*{Line 2:}
+\begin{description}
+\item[dty:] Time step [yr]
+\item[Prot:] Rotational period [days]
+\item[zet:] Mass loss rate other than Roche lobe overflow, \emph{e.g.}\ wind. [$M_\odot$ yr$^{-1}$]
+\item[tKh:] Kelvin-Helmholtz timescale
+\item[LHe:] Luminosity due to helium burning
+\item[RCZ:]
+\item[McCO:] Mass of CO core
+\item[TXH:] H abundance at $T_\mathrm{max}$
+\item[TXHe:] He abundance at $T_\mathrm{max}$
+\item[TXC:] C abundance at $T_\mathrm{max}$
+\item[TXN:] N abundance at $T_\mathrm{max}$
+\item[TXO:] O abundance at $T_\mathrm{max}$
+\item[TXNe:] Ne abundance at $T_\mathrm{max}$
+\item[TXMg:] Mg abundance at $T_\mathrm{max}$
+\item[Tpsi:] Value of the electron degeneracy parameter at $T_\mathrm{max}$
+\item[Trho:] log $T_\mathrm{max}$
+\item[TT:] log rho at $T_\mathrm{max}$
+\end{description}
+
+
+
+\subsubsection*{Line 3:}
+\begin{description}
+\item[age:] Stellar age [yr]
+\item[ecc:] Orbital eccentricity
+\item[mdt:] Mass loss [$M_\odot$ yr$^{-1}$]
+\item[tET:] Envelope Turnover timescale of the convective envelope
+\item[LCO:] Luminosity due to Carbon/Oxygen burning
+\item[DRCZ:]
+\item[McNe:] Mass of Neon Core
+\item[SXH:] Surface abundance of H
+\item[SXHe:] Surface abundance of He
+\item[SXC:] Surface abundance of C
+\item[SXN:] Surface abundance of N
+\item[SXO:] Surface abundance of O
+\item[SXNe:] Surface abundance of Ne
+\item[SXMg:] Surface abundance of Mg
+\item[Spsi:] Surface value of the electron-degeneracy parameter
+\item[Srho:] Log Surface density
+\item[ST:] Log Surface Temperature
+\end{description}
+
+
+
+\subsubsection*{Line 4:}
+\begin{description}
+\item[cM:] Companion Mass [$M_\odot$]
+\item[RLF1:] Relative Roche-lobe radius [$\log R/R_\mathrm{rlof}$]
+\item[RLF2:] Relative Roche-lobe radius [$\log R/R_\mathrm{rlof}$]
+\item[DLT:]
+\item[Lnu:] Luminosity due to neutrino losses
+\item[RA/R:] Alfv\'en radius [$R_*$]
+\item[MH:] Total hydrogen mass in the star [$M_\odot$]
+\item[conv. bdries:] Mass coordinates of convective boundaries (3 pairs)
+\item[logR:] Log R
+\item[logL:] log L
+\end{description}
+
+
+
+\subsubsection*{Line 5:}
+\begin{description}
+
+\item[Horb:] Orbital angular momentum
+\item[F1:]
+\item[DF21:]
+\item[BE:]
+\item[Lth:] Luminosity from contraction/expansion
+\item[Bp:] Poloidal component of the magnetic field
+\item[MHe:] Total helium mass in the star [$M_\odot$]
+\item[semiconv. bdries:] Mass coordinates of semiconvective boundaries (3 pairs)
+\item[k**2:] Dimensionless axis of gyration, if moment of inertia is calculated in the code.
+\end{description}
+
+
+
+
+\subsection{Convergence info}
+
+\begin{description}
+\item[Iter] The first integer displays the number of iterations,
+\item[Err] The logarithm of the total error,
+\item[Ferr] The residue in the current iteration,
+\item[Fac] The factor by which corrections are multiplied before being applied. Normally 1.00, 
+  but may be smaller if the code has trouble converging.
+\end{description}
+
+\noindent
+Then a list of numbers follows, in pairs of an integer and a float (\emph{e.g.}\ $79-9.2$). There is one 
+pair for each independent variable. The integer indicates the mesh point in the star ($1$ indicates the \textit{surface})
+%(and \texttt{KH} the core) 
+where the largest error for this independent variable occurs and the float indicates the log of the error 
+in that mesh point.  In practice this means that $(199-9.9)$ is a good thing since $10^{-9.9}$ is a 
+very small error, $(98-3.1)$ is worrying and when the floats get to $-2.0$ or larger something is 
+really wrong.
+It is usually a good idea to scroll up and look whether earlier blocks exist and, if so, to see whether 
+the same variables are causing the problems there --- sometimes one variable starts causing problems and 
+then drags along others.
+
+
+
+%83-MV; -Not actually in .out1, it is in .out
+%84- B-V; - Not actually in .out1, it is in .out
+%*85- U-B; - Not actually in .out1, it is in .out 

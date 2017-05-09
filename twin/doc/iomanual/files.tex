@@ -1,0 +1,89 @@
+\section{IO files}
+
+\subsection{Input files}
+
+\begin{description}
+\item[\texttt{init.dat}] Initialisation file. Contains the details of the numerics, equations to solve and physics to include while running a stellar model (unit 22).
+\item[\texttt{init.run}] Run control file. Controls the start and stop conditions for different models in a run. One can loop over $M_1$, $q \equiv \frac{M1}{M2}$ and $P_\mathrm{i}$.  Output
+from different loops is stored in files with different names or in different directories.  The file \texttt{file.list} gives an overview of which model is stored where (unit 23).
+\end{description}
+
+
+\subsection{Output files}
+As an example I chose the file name \texttt{file.*} for the model files.
+
+\begin{description}
+\item[\texttt{file.out1,2}] Main output file, showing what the stars are doing at that moment. These files are useful as `screen output' (units 1,2).
+\item[\texttt{file.out}] Pruned version of the above two files (unit 9). \remark{To be removed?}
+\item[\texttt{file.io12}]\hypertarget{io12}{} Contains orbital and mass-transfer data from star 1, to be used in star 2 in non-TWIN binary mode (unit 3).
+\item[\texttt{file.mod}] Contains a number of complete stellar-structure output blocks. A block from this file can serve as input for a next model (unit 15).
+\item[\texttt{file.last1,2}] Contains complete structure of last and pre-last model, when lucky, that can serve as input for a next run (units 13,14).
+\item[\texttt{file.list}] Shows the starting time and path of a run and tables the properties of the different models and the file names or directories in which they are stored (unit 50).
+\item[\texttt{file.log}] Shows how the code was terminated, if terminated properly (unit 8).
+\item[\texttt{file.mas}] Creation of helper file to find the proper ZAMS model from \texttt{zams.mod} (unit 29?)
+\item[\texttt{file.plt1,2}] Contains stellar-evolution data, one model per line (units 31,32).
+\item[\texttt{file.mdl1,2}] Contains a number of complete stellar-structure models, one mesh point per line (units 33,34).
+\item[\texttt{file.nucout1,2}] Main abundances ``screen-output file'' \remark{true?} (units 35,36).
+\item[\texttt{file.nucplt1,2}] Contains abundances in stellar-evolution models, one model per line \remark{true?} (units 37,38).
+\item[\texttt{file.nucmdl1,2}] Contains abundances in stellar-structure models, one mesh point per line \remark{true?} (units 39,40).
+\end{description}
+
+
+\subsection{Data files}
+
+The files below can be found in the \texttt{input/} directory of the installation and are used for data input (ZAMS, opacities, etc.):
+\begin{description}
+\item[\texttt{zahb*.mod}] Input structure model for post-helium-flash models (unit 12)
+\item[\texttt{zahb.dat}] ``\texttt{init.dat}'' for post-helium-flash models (unit 24?)
+\item[\texttt{zams.mod}] Input structure model for ZAMS models (unit 16)
+%\item[\texttt{zams.dat}] Helps to find the proper ZAMS model from \texttt{zams.mod} \remark{(unit ?) --- No longer used?}
+%\item[\texttt{zams.out}] Helps to find the proper ZAMS model from \texttt{zams.mod} \remark{(unit ?) --- No longer used?}
+\item[\texttt{zams.mas}] Reading of helper file to find the proper ZAMS model from \texttt{zams.mod} (unit 19?)
+\item[\texttt{phys.z*}] opacity tables for certain metallicity  (unit 20?)
+\item[\texttt{lt2ubv.dat}] Data to compute magnitudes and colours from $L$, $T_\mathrm{eff}$ (unit 21?)
+\item[\texttt{nucdata.dat}] Data to compute nuclear reactions (unit 26?)
+\item[\texttt{mutate.dat}] Data to \remark{do something with merger products?} (unit 63)
+\item[\texttt{COtables\_z*}] Data to compute opacities (unit 41)
+\item[\texttt{physinfo.dat}] \remark{To do} (unit 42)
+\item[\texttt{rates.dat}] \remark{To do} (unit 43)
+\item[\texttt{nrates.dat}] \remark{To do} (unit 44)
+%\item[\texttt{}] (unit )
+\end{description}
+
+\subsection{Temporary files}
+\begin{description}
+\item[\texttt{fort.11}] is used to create stop the code, using the command \texttt{echo 1 > fort.11}
+\end{description}
+
+
+
+\subsection{Output file by unit}
+
+\begin{tabular}{llll}
+ 1 & file.out1    \hspace*{2.cm} &    2 & file.out2    \\
+ 3 & file.io12    &   &   \\
+ 8 & file.log     &   &   \\
+ 9 & file.out     &   &   \\
+11 & (fort.11)     &   &   \\
+12 & zahb*.mod   &   &   \\
+13 & file.last1   &   14 & file.last2   \\
+15 & file.mod     &   &   \\
+16 & zams.mod     &   &   \\
+19? & zams.mas     &   &   \\
+20? & phys.z*   &   &   \\
+21? & lt2ubv.dat   &   &   \\
+22 & init.dat   &   23 & init.run   \\
+24? & zahb.dat   &   &   \\
+26? & nucdata.dat   &   &   \\
+29? & file.mas    &   &   \\
+31 & file.plt1    &   32 & file.plt2    \\
+33 & file.mdl1    &   34 & file.mdl2    \\
+35 & file.nucout1 &   36 & file.nucout2 \\
+37 & file.nucplt1 &   38 & file.nucplt2 \\
+39 & file.nucmdl1 &   40 & file.nucmdl2 \\
+41 & COtables\_z* &   &   \\
+42 & physinfo.dat &   &   \\
+43 & rates.dat &   44 & nrates.dat \\
+50 & file.list &   &   \\
+63 & mutate.dat &   &   \\
+\end{tabular}

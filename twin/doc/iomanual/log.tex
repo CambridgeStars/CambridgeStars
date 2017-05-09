@@ -1,0 +1,34 @@
+\section{file.log}
+\label{sec:log}
+
+This file contains the exit code with which the Eggleton code terminated.
+Usually, the file lists an explanation of these codes at the top of
+the files, but for grids these lines may lack.
+
+\begin{description}
+\item[-2]  Requested mesh too large (\texttt{BEGINN})
+\item[-1]  No timesteps required (\texttt{STAR12})
+\item[ 0]  Finished required timesteps (\texttt{STAR12})
+\item[ 1]  Failed; backup, reduce timestep (\texttt{SOLVER})
+\item[ 2]  Time step reduced below limit; quit (\texttt{BACKUP})
+\item[ 3]  Star 2 evolving beyond last star 1 model (\texttt{NEXTDT})
+\item[ 4]  Star 1: stellar radius exceeds Roche-lobe radius by limit (UC(1), \texttt{PRINTB})
+\item[ 5]  Age greater than limit (UC(2), \texttt{PRINTB})
+\item[ 6]  Carbon burning exceeds limit (UC(3), \texttt{PRINTB})
+\item[ 7]  Star 2 radius exceeds Roche-lobe radius by limit (UC(4), \texttt{PRINTB})
+\item[ 8]  Close to helium flash (UC(5,6), \texttt{PRINTB})
+\item[ 9]  Massive ($>1.2 M_\odot$), degenerate CO core (UC(7,8), \texttt{PRINTB})
+\item[10]  $|\dot{M}_1|$ exceeds limit (UC(9), \texttt{PRINTB})
+\item[11]  Impermissible FDT for star 2 (\texttt{NEXTDT})
+\item[12]  Time step reduced below limit -- hydrogen left in the core; quit (\texttt{BACKUP})
+\item[14]  Funny composition distribution ($M_\mathrm{H}<M_\mathrm{He}$ or $M_\mathrm{He}<M_\mathrm{CO}$, \texttt{PRINTB})
+\item[15]  Terminated by hand (\texttt{STAR12})
+\item[16]  ZAHB model didn't converge (\texttt{MAIN})
+\item[17]  Nucleosynthesis didn't converge (\texttt{BEGINN})
+\item[22]  Time step reduced below limit -- helium left in the core; quit (\texttt{BACKUP})
+\item[32]  Time step reduced below limit -- carbon left in the core; quit (\texttt{BACKUP})
+\item[51]  End of MS (core hydrogen abundance below limit) (UC(15), \texttt{PRINTB})
+\item[52]  Radius exceeds limit (\texttt{PRINTB})
+\item[53]  Convergence to target model reached minimum (\texttt{PRINTB})
+\end{description}
+

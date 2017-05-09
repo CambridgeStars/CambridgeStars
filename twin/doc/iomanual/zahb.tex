@@ -1,0 +1,25 @@
+\section{Creating a ZAHB model}
+
+In order to create a ZAHB model, for instance because the format of the
+input files has changed or because you want a different metallicity, you can
+use the following recipe.  Most of the work is actually already done by test 
+run 07.  However, or lower metallicities you will need a more massive ZAMS
+star and it may be harder to get a low-mass ZAHB star.
+
+
+\begin{itemize}
+\item Evolve a $2.25 M_\odot$ star until it starts core helium burning.  Do not
+  allow the helium to be consumed (\hyperlink{ky}{KY}=0).  This is done in run
+  07a.
+\item Start mass loss until the star is down to about $0.4 M_\odot$. This step
+  is covered by run 07b.
+\item Put the starting model and an appropriate init.dat file in
+  \texttt{input/zahb<Z>.mod}, where $Z$ is the metallicity (02 for $Z=0.02$, etc.)
+\item Test the result for a $1.0\,M_\odot$ model (run 03).
+\item If the code can produce the ZAHB model, but it cannot
+  continue the evolution on the HB (error code 16), the problem may be a too-small
+  desired number of models (see the parameter \hyperlink{kp}{\texttt{kp}} in 
+  the first (\emph{i.e.}\ header) line of the structure model) in 
+  \texttt{input/zahb<Z>.mod}.
+\end{itemize}
+

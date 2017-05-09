@@ -1,0 +1,167 @@
+\hypertarget{initrun}{}
+\section{init.run}
+\label{sec:initrun}
+
+The \texttt{init.run} file contains parameters that control how to start and stop the run. 
+You have to decide on each of four options, each giving two alternatives. The options are
+\begin{description}
+\item[a)] single stars or binary stars
+\item[b)] new, i.e. starting from scratch (ZAMS), or old, e.g. starting from the end
+of a previous run.
+\item[c)] independent evolution (`normal mode'), or \emph{simultaneous} evolution (`TWIN mode'), of the components.
+\item[d)] a `one-model' or `grid' run. A grid
+  means several runs, one after the other (but simultaneous using the massively
+  parallel version, not described here), with the three parameters of primary mass, 
+  mass ratio and orbital period being cycled through. One-shot means what it says.
+\end{description}
+
+Not all 16 possibilities make sense: e.g. if you are doing TWIN evolution,
+you won't want single stars. Many but not all of the remaining possibilities should 
+be viable.
+
+
+\subsection{Mode of operation}
+\subsubsection*{ISB, KTW, IP1, IM1, IP2, IM2, KPT, KP}
+\begin{description}
+\item[ISB]\hypertarget{isb}{} evolve one or two stars. 
+  ISB = 1 implies only one star should be computed in detail; 
+  ISB = 2 evolves both components of a binary. For \emph{single} stars, you may still use the outer 
+  (first) cycle for masses. The inner 2 cycles are automatically set to do only one 
+  case each. The mass ratio and the period are of course virtually ignored for single stars, 
+  but have to be supplied. The period should be so large that there is no danger of RLOF
+  (see also Sect.\,\ref{sec:modus}).
+  (\emph{e.g.}\ XL = 7.0, meaning a period of $\sim 10^7\,$d).
+\item[KTW]\hypertarget{ktw}{}  1 for normal, non-simultaneous operation; 2 for TWIN mode, where both stars are solved 
+  \emph{simultaneously}.  See Sect.\,\ref{sec:modus} for more detail.
+\item[IP1]\hypertarget{ip1}{} the number (13 -- 16) of the file (fort.13 -- fort.16) where the
+  initial model for $*1$ is to be taken from. ZAMS models are on fort.16.
+\item[IM1]\hypertarget{im1}{} the sequential number of the model required on fort.IP1. This is
+  computed automatically, from later data, if the ZAMS file fort.16 is used,
+  so that if IP1 is 16, it doesn't matter what value you give for IM1, but
+  you have to give a value.
+\item[IP2]\hypertarget{ip2}{}  as IP1, but for $*2$.
+\item[IM2]\hypertarget{im2}{} as IM1, but for $*2$.
+\item[KPT]\hypertarget{kpt}{} the maximum number of timesteps for each component (2000 to 4000 
+  for fairly complete evolution). 
+  You may set KPT equal to -1 to indicate that the code should run until
+  one of the termination conditions is met, in other words, the code will
+  not stop when it reaches a predetermined number of timesteps.
+\item[KP]\hypertarget{kp}{}  Do approximately KP of $*1$, then enough of $*2$
+  to catch up with $*1$, then another $\sim$ KP of $*1$, etc, so that if $*2$ 
+  breaks down before $*1$ you don't waste a lot of calculation on $*1$. 
+  You will seldom get \emph{exactly} the number of timesteps that you ask for.
+  For single stars, KP is set to KPT automatically.
+\end{description}
+
+
+
+\subsection{Grids of masses and periods}
+\subsubsection*{ML1, DML, KML; ~QL1, DQL, KQL; ~XL1, DXL, KXL}
+\label{sec:initrun_grids}
+
+These three lines contain parameters for 3 nested loops (mass, mass ratio, and 
+initial period) to be run through. Each loop has: starting value; increment; 
+number of cases (1 more than the number of increments).
+\begin{itemize} 
+\item The first (outer) loop is:   log$_{10}$ (mass, solar units), starting at ML1, 
+  increasing by steps of DML to ML1 + (KML -- 1) . DML
+\item The second loop is:  log$_{10}$ (mass ratio in sense $\{$larger/smaller$\}$), 
+  starting at QL1, increasing by steps of DQL to QL1 + (KQL -- 1) . DQL
+\item The third (inner) loop is:   X $\equiv$ log$_{10}$(orbital period /{period necessary for 
+    $*1$ to fill its Roche lobe when still on the ZAMS}), starting at XL1, increasing 
+  by steps of DXL to XL1 + (KXL -- 1) . DXL.
+\item If you want to compute only one model (single or binary), set KML = KQL = KXL = 1.
+\end{itemize}
+
+When a grid is computed, the initial binary parameters \hyperlink{sm}{\texttt{SM}},
+\hyperlink{bms}{\texttt{BMS}} and \hyperlink{per}{\texttt{PER}} must be set to negative 
+values, to ensure that they don't override the grid values.
+
+
+\subsection{Rotation and eccentricity}
+\subsubsection*{ROT, KR, EX}
+\begin{description}
+\item[ROT, KR]
+  \begin{description} 
+  \item[\texttt{KR} = 1:] $P_\mathrm{rot}$ for each star = rotational breakup period * $10^\texttt{ROT}$ \remark{PERC: breakup or RLOF at ZAMS?}
+  \item[\texttt{KR} = 2:] $P_\mathrm{rot}$ for each star = max(1.05 * rotational breakup period, orbital period * $10^\texttt{ROT}$) \remark{PERC: breakup or RLOF at ZAMS?}
+  \item[\texttt{KR} $\ge$ 3:] set $P_\mathrm{rot} = P_\mathrm{orb}$; (almost) synchronous rotation
+  \end{description}
+\item[EX] the initial eccentricity.
+\end{description}
+
+
+\subsection{Initial binary parameters}
+\subsubsection*{SM, DTY, AGE, PER, BMS, ECC, P, ENC,  ~JMX}
+(a.k.a.\ AX(1-8), JMX).
+The AX's are optional replacements for the values of \texttt{SM}, \ldots, \texttt{ENC} that the 
+code would normally pick up in fort.IP1 from some previous run, or from the ZAMS
+library (\texttt{fort.16}). JMX similarly is an optional replacement
+for JMOD. They are only applied if they are non-negative. Thus you can replace
+only one, or several.
+
+\begin{description}
+\item[SM]\hypertarget{sm}{} Primary mass [$M_\odot$]
+\item[DTY]\hypertarget{dty}{} Time step [yr]
+\item[AGE]\hypertarget{age}{} Model age [yr]
+\item[PER]\hypertarget{per}{} Orbital period [d -- or fraction of break-up?]
+\item[BMS]\hypertarget{bms}{} Total binary mass [$M_\odot$]
+\item[ECC]\hypertarget{ecc}{} Orbital eccentricity
+\item[P]\hypertarget{p}{} Spin period of the primary [d]
+\item[ENC]\hypertarget{enc}{}\hypertarget{enc}{} Artificial energy rate, see \hyperlink{cea}{CEA} and \hyperlink{cet}{CET} [?]
+\item[JMX]\hypertarget{jmx}{} New model number (JMOD). Set to $-1$ to keep unchanged, to $0$ to set the mass of a ZAMS model 
+  using the loop parameters \texttt{ML1,QL1} above, ignoring \texttt{SM}  (when using \texttt{IP1,2}=16) 
+  \remark{True?} and to any positive value to start counting models at that value.
+  For grids looping over primary mass and mass ratio, you \emph{must} set \texttt{JMX} to $0$!
+  \remark{In some cases, when restarting an evolved model, you seem to have to set \texttt{JMX} to $>0$!}
+\end{description}
+
+
+\subsubsection*{START\_WITH\_RIGID\_ROTATION}
+Can be \texttt{TRUE} or \texttt{FALSE}.
+
+
+
+
+\subsection{Termination conditions}
+\subsubsection*{UC:}
+The last three lines are a set of 21 criteria (UC(1--21)) to determine when the run is to
+be ended (e.g. when the age is greater than $2\times 10^{10}\,$yr), or when some special procedure should be initiated (e.g. the He-flash evasion). You'll have to
+read the end of printb.f to figure them out completely.  In many cases the code is stopped by changing the termination code $JO$.
+
+\subsubsection*{UC(1-7):}
+\begin{description}
+\item[UC(1):] (rlf1)  Terminate if FLR(=RLF?) (Sect.\,\ref{sec:plt}, nr 29) of star 1 exceeds this number ($JO=4$)  ~(0.1)
+\item[UC(2):] (age)   Terminate if the age of the model in years exceeds this number ($JO=5$) ~(2e10)
+\item[UC(3):] (LCarb) Terminate if $L_\mathrm{C} > $ this number ($JO=6$)  ~(100)
+\item[UC(4):] (rlf2)  Terminate if FLR(=RLF?) (Sect.\,\ref{sec:plt}, nr 29) of star 2 exceeds this number ($JO=7$)  ~(0.2)
+\item[UC(5):] (LHe)   Initiate He-flash evasion if $L_\mathrm{He} > $ this number, together with UC(6) ($JO=8$)  ~(1e3, lower for M$_*\approx 2M_\odot$)
+\item[UC(6):] (rho)   Initiate He-flash evasion if $\log\,\rho_\mathrm{c} >$ this value (?), together with UC(5) ($JO=8$)  ~(5.3)
+\item[UC(7):] (MCO)   Terminate if degenerate CO-core exceeds this mass, together with UC(8) ($JO=9$)  ~(1.2)
+\end{description}
+
+\subsubsection*{UC(8-14):}
+\begin{description}
+\item[UC(8):]  (rho)   Terminate if $\log\,\rho_\mathrm{c} >$ this value (?), together with UC(7) ($JO=9$)  ~(6.3) 
+\item[UC(9):]  (mdot)  Terminate if $|\dot{M}| \,>\, \mathrm{UC}(9)*M_*/\tau_\mathrm{KH}$  ($JO=10$)  ~(3e2) 
+\item[UC(10):] (XHe)   Change eps (next number) if the core Helium abundance drops below this number ~(0.15)
+\item[UC(11):] (eps)   If $Y_\mathrm{core} <$ XHe (previous number), set \hyperlink{eps}{EPS} to this number.  Do not use, keep this number 1e-6!  ~(1e-6)
+\item[UC(12):] (dtmin) Terminate if $\Delta\,t <$ dtmin (in seconds?) ~(1e6)
+\item[UC(13):] (sm8)   The total mass the post-He-flash model should get, can also be used manually!  ~(1e3)
+\item[UC(14):] (vmh8)  The He-core mass he post-He-flash model should get, can also be used manually!  ~(1e3)
+\end{description}
+
+
+\subsubsection*{UC(15-21):}
+\begin{description}
+\item[UC(15):] (XH)    If $>0$: terminate if the core H-abundance drops below this value, you can e.g. stop at the TAMS ($JO=51$) ~(0.0)
+%\item[UC(16):]   
+%\item[UC(17):]   
+%\item[UC(18):]   
+%\item[UC(19):]   
+%\item[UC(20):]   
+%\item[UC(21):]   
+\item[UC(16--21):]   Unused
+\end{description}
+
+

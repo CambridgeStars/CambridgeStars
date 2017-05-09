@@ -1,0 +1,58 @@
+\section{Creating a ZAMS model}
+
+\emph{
+  Note that this section is about manual meddeling with models --- you don't need this for normal operation of the code, 
+  e.g.\ to change the ZAMS mass of a model, for that see the section \hyperlink{initrun}{init.run}.
+If you want to create a ZAMS series, see the example run 01 in the directory} \texttt{run/01-zams/}.
+
+
+\vspace*{0.5cm}
+
+In order to create a (ZAMS) model of certain mass, or to obtain a series
+of ZAMS models, one can use the \texttt{RMG} mass loss/gain parameter in
+the \texttt{init.dat} file.  This parameter gives a mass loss or mass gain
+that is proportional to the mass of the star.
+
+The method is as follows:
+
+\begin{itemize}
+\item Choose an existing input model with a mass close to the desired mass
+
+\item Set the parameter \hyperlink{cmi}{\texttt{CMI}} to the desired value (usually $\pm 5 \times 10^{-9}$)
+
+\item Make sure the time step doesn't change (\hyperlink{ct1}{\texttt{CT1}} = \hyperlink{ct2}{\texttt{CT2}} = 1.00
+
+\item Calculate the factor $f$ with which you want to change the mass to get from the model
+you have to the model you want. (If you have 1.00~$M_\odot$ and want 1.02~$M_\odot$, $f=1.02$)
+
+\item Calculate the approximate number of steps you need to take for a time step size 
+$\mathrm{d}t_0 = 10^3$~yr and the \hyperlink{cmi}{\texttt{CMI}} above: $N_0 = \frac{\ln f}{\mathrm{CMI}~ \mathrm{d}t_0}$
+
+\item Choose a (nice, round, but at least) integer number of steps $N \approx N_0$
+
+\item Calculate the true time step for N steps: $\mathrm{d}t = \frac{\ln f}{\mathrm{CMI} ~N}$
+
+\item Fill in the values for $\mathrm{d}t$ and $N$ in \hyperlink{initrun}{\texttt{init.run}}
+
+\item Run the model for $N$ steps and check the final mass in \texttt{file.mod}
+\end{itemize}
+
+\vspace{1cm}
+
+\[
+dt~=~\frac{\ln\left(\frac{M_\mathrm{f}}{M_\mathrm{i}}\right)}{N ~~ \mathrm{CMI}}
+\]
+
+\vspace{1cm}
+
+The Fortran program \texttt{makezams.f} (see \href{http://www.astro.uu.nl/~sluys/Eggleton/#tools}{website}) is supposed to do all the above.
+
+\vspace{1cm}
+
+If all goes well, you'll end up with the mass slightly off.  You can give your model the exact mass you want
+by switching off the wind, put the desired mass in \texttt{init.run} and run another 10 models or so.
+
+If the change in mass is less than expected, you may have chosen your timestep too long, so that the code does
+not converge, recalculates the model with a smaller timestep and continues with this smaller timestep 
+(since it is not allowed to change).
+

@@ -1,0 +1,62 @@
+\hypertarget{difeqs}{} 
+\section{The difference equations}
+\label{sec:difeqs}
+
+\def\mp{m^{\prime}}
+\def\Qp{Q^{\prime}}
+
+The difference equations are selected in \hyperlink{kp_eqn}{\texttt{kp\_eqn}} in \texttt{init.dat}
+and are also known as \texttt{id(51:90)}, \texttt{ig(51:90)} in \eg\ \texttt{solver()}.
+See also the Writeup, Section~1.5 (p.\,9) for more explanation.
+
+
+\begin{description}
+\item[(1 -- 5, 13,14, 44,45)]   Abundance equations: \\
+  $\sigma_{\mathrm{k} +1/2}(X_{\mathrm{k} +1}-X_\mathrm{k })  \ - \   \sigma_{\mathrm{k}-1/2}(X_\mathrm{k }-X_{\mathrm{k} -1}) 
+  \  = \  (\dot{X} _\mathrm{k }+R_\mathrm{nuc, k}) \mp _\mathrm{k }  \  - \  (X_{\mathrm{k}+1}-X_\mathrm{k })[\dot{m}_\mathrm{k }] 
+  \ + \ (X_\mathrm{k }-X_{\mathrm{k} -1})[-\dot{m}_{\mathrm{k} +1}]$
+\item[(1)]   $^1$H abundance equation
+\item[(2)]   $^{16}$O abundance equation
+\item[(3)]   $^{4}$He abundance equation
+\item[(4)]   $^{12}$C abundance equation
+\item[(5)]   $^{20}$Ne abundance equation
+
+
+\item[(6)]   Pressure (rotation?) $\log P_{\mathrm{k} +1}  - \log P_\mathrm{k } \  = \  - (A\mp )_{\mathrm{k} +1/2}$
+\item[(7)]   Radius: $r^2_{\mathrm{k} +1} - r^2_\mathrm{k } \  = \  (\mp /2\pi \rho r)_{\mathrm{k} +1/2}$
+\item[(8)]   Temperature: $\log T_{\mathrm{k} +1} - \log T_\mathrm{k } \  = \  - (\nabla A \mp)_{\mathrm{k} +1/2}$
+\item[(9)]   Luminosity: $L_{\mathrm{k} +1} - L_\mathrm{k } = (\mp E_1)_{\mathrm{k} +1/2}$     \ + \   $(\mp E_2)_\mathrm{k}$[$\dot{m}_\mathrm{k}] 
+             \ - \ (\mp E_2)_\mathrm{k + 1}$ [$-\dot{m}_{\mathrm{k} +1}$] 
+\item[(10)]  Mass: $m_{\mathrm{k} +1}^{2/3} - m_\mathrm{k }^{2/3} \  = \   (2\mp/3m^{1/3})_{\mathrm{k} +1/2}$ 
+\item[(11)]  Moment of inertia: $I_{\mathrm{k} +1} - I_\mathrm{k } \  = \  (2\mp r^2 /3)_{\mathrm{k} +1/2}$
+\item[(12)]  Surface? $L_1$? potential: $\phi_{\mathrm{k} +1} - \phi_\mathrm{k } \  = \   (Gm\mp /4\pi r^4\rho)_{\mathrm{k} +1/2}$
+\item[(13)]  $^{14}$N abundance equation
+\item[(14)]  $^{24}$Mg abundance equation
+\item[(15)]  Sum of the abundances is constant: $\sum_i \dot{X}_i = 0$; normally used instead of (14) for $^{24}$Mg.
+\item[(16)]  Equation for artificial, mesh-dependent energy term (MENC)
+\item[(18)]  Equation for MEA \ldots?  --- Related to MENC (Eq.\,16) and luminosity \ldots?
+\item[(19)]  Mass-transfer rate: $\xi_{\mathrm{k}+1} - \xi_\mathrm{k} \  = \ $CMT$ \times (\sqrt{[2\phi_s]}/r\ \mp)_{\mathrm{k} +1/2}$, \ \ if\ \  $\phi > 0$;\ \  $=0$ otherwise.
+
+\item[(22)]  Equation for MET \ldots?  --- Related to MENC (Eq.\,16) \ldots?
+
+\item[(25--37)]  \remark{CHECK ???}
+%\item[(25)]  \remark{CHECK ???}
+%\item[(26)]  \remark{CHECK ???}
+%\item[(27)]  \remark{CHECK ???}
+%\item[(28)]  \remark{CHECK ???}
+%\item[(29)]  \remark{CHECK ???}
+%\item[(30)]  \remark{CHECK ???}
+%\item[(31)]  \remark{CHECK ???}
+%\item[(32)]  \remark{CHECK ???}
+%\item[(33)]  \remark{CHECK ???}
+%\item[(34)]  \remark{CHECK ???}
+%\item[(35)]  \remark{CHECK ???}
+%\item[(36)]  \remark{CHECK ???}
+%\item[(37)]  \remark{CHECK ???}
+
+
+\item[(42)]  Angular-momentum transport (\ldots?)
+\item[(43)]  Total angular momentum (\ldots?)
+\item[(44)]  $^{28}$Si abundance equation
+\item[(45)]  $^{56}$Fe abundance equation
+\end{description}

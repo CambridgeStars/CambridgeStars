@@ -1,0 +1,91 @@
+\hypertarget{modus}{}
+\section{Modus operandi}
+\label{sec:modus}
+
+
+The stellar evolution code \texttt{ev} is designed to be a binary-evolution code.  However, it can be used to
+compute the evolution of both single and binary stars, and for binaries, there are several possible modes to
+use the code in.  These modes are set by two parameters in \texttt{init.run}: \hyperlink{isb}{ISB} (1 or 2,
+depending on whether we want to evolve one or two stars) and \hyperlink{ktw}{KTW} (1 or 2 for non-simultaneous 
+or non-simultaneous binary mode, respectively).
+
+
+\subsection{Single stars}
+
+Since \texttt{ev} is a binary-evolution code, single stars are in effect in a binary.  Since you don't want to 
+waste your undoubtedly valuable (CPU) time on computing the secondary, we set \texttt{ISB}=1 (single star) and
+\texttt{KTW}=1 (non-TWIN mode --- I'm not sure whether it matters, but it seems a safe way to go).  
+
+However, here we only tell the code not to compute a model of the secondary.  It will still exist, as a point
+mass.  The important thing is that Roche lobes will still be defined, and it is important to set the initial orbital
+period (\hyperlink{per}{PER}, in \texttt{init.run}) to a sufficiently high value to make sure your `single star'
+will not fill its Roche lobe.  In addition, I usually set \hyperlink{bms}{BMS} to twice \hyperlink{sm}{SM}, to 
+make sure you don't end up with a negative secondary mass.  Experienced users may want to switch off the equations 
+that govern orbital evolution, mass transfer, etc., in \texttt{init.dat}, see Sect.\,\ref{sec:initdat:eqvarbc}.
+
+
+
+\subsection{Binary stars}
+
+When computing the evolution of a binary, we can choose whether we want to compute a full model of the secondary,
+or regard it as a point mass (which can be useful when dealing with WD, NS or BH accretors).  If we want to 
+compute a detailed model of the secondary, we can choose between \emph{non-simultaneous evolution}, in which the primary
+is evolved for \hypertarget{kp}{KP} timesteps, before switching to the secondary to catch up in age with the primary,
+and \emph{simultaneous evolution} (also known as \emph{TWIN mode}), in which both components are evolved at the same
+time, and mass transfer is taken into account implicitly (this is necessary if \emph{e.g.}\ both stars have winds).
+
+
+\subsubsection{Primary + compact companion (point mass)}
+
+Evolving a binary with a point mass is essentially similar to single-star mode, except that we will set the binary
+mass (\hyperlink{bms}{BMS}) and the orbital period (\hyperlink{per}{PER}) to the values we want, and we make sure 
+that exactly one of \hyperlink{cmt}{CMT} or \hyperlink{cms}{CMS} is non-zero when using a version of \texttt{init.dat}
+for single-star evolution.  You may want to check whether the equations for orbital evolution and mass transfer are 
+being solved, see Sect.\,\ref{sec:initdat:eqvarbc}, but in principle this is not necessary.
+We also set \hyperlink{isb}{ISB}=1 (evolve one star) and \hyperlink{ktw}{KTW}=1 (non-simultaneous mode) in \texttt{init.dat}.
+
+
+\subsubsection{Two components, non-simultaneous}
+
+This mode was the original way of computing the evolution of a binary: the primary is evolved for \hypertarget{kp}{KP} 
+timesteps, after which the code switches to the secondary, evolves it to the same age as the primary, and it keeps
+alternating between the two.
+
+This approximates binary evolution sufficiently well for many cases, but it will not when the secondary has a 
+non-negligible wind, or when the secondary fills it's Roche lobe.  In other words, all changes to the orbit are
+made by the primary and the secondary cannot have any influence on the orbit (since if it would, this would affect
+the evolution of a Roche-lobe-filling primary, which has already been established in the previous semi-cycle).
+
+During the first semi-cycle, while evolving the primary, data on orbital evolution and mass transfer are stored in 
+\hyperlink{io12}{\texttt{file.io12}}, which are then read again during the second semi-cycle, where the secondary is evolved.
+
+In order to use this mode, set \hyperlink{isb}{ISB}=2 (evolve two stars) and \hyperlink{ktw}{KTW}=1 (non-simultaneous mode),
+and make sure you solve equations for mass transfer and orbital evolution (see Sect.\,\ref{sec:initdat:eqvarbc}).
+
+
+
+\subsubsection{Two components, simultaneous (TWIN mode)}
+
+TWIN mode was developed by Peter Eggleton as an improvement of the non-simultaneous evolution in the previous section.
+It allows mass loss and mass transfer from the secondary, and, in particular, contact binaries (at least in principle).
+Both stars are evolved simultaneously, and mass transfer is solved implicitly.  
+
+In order to use TWIN mode, set \hyperlink{isb}{ISB}=2 (evolve two stars) and \hyperlink{ktw}{KTW}=2 (simultaneous mode),
+and make sure you solve all necessary equations (see Sect.\,\ref{sec:initdat:eqvarbc}).
+
+
+
+\subsection{Creating grids in mass, mass ratio and period}
+
+\remark{This is currently broken, due to the way (output?) files are opened.}
+
+Apart from computing the model of a single binary (or one single star), the code can be used to compute grids of models,
+for ranges of initial primary mass, mass ratio and orbital period.  
+
+When you want to compute a grid, the initial binary parameters \hyperlink{sm}{\texttt{SM}},
+\hyperlink{bms}{\texttt{BMS}} and \hyperlink{per}{\texttt{PER}} in \texttt{init.run} must be set to negative 
+values, to ensure that they don't override the grid values.
+
+If you want to compute only one model, make sure \texttt{KML} = \texttt{KQL} = \texttt{KXL} = 1.
+
+See Section~\ref{sec:initrun_grids} for more details.

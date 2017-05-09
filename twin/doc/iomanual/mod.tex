@@ -1,0 +1,75 @@
+\section{file.mod}
+\label{sec:mod}
+
+This file contains stellar structure output, that can be used as input.
+The files \texttt{file.last1,2} have the same format.
+
+The file consists of one or more blocks, starting with a single line with 13 model properties
+and followed by a block with one line per mesh point with the independent variables.  This
+block contains 24 columns of which only part is used.  Some of them are `eigenvalues' and
+have the same value for every mesh point.
+
+
+\subsection{Header}
+The first line of the file contains the 13 numbers:
+\begin{enumerate}
+\item $M_1$, the mass of the primary [$M_\odot$]
+\item $\Delta\,t$, time step [yr]
+\item $t$, age of the model [yr]
+\item $P_\mathrm{orb}$, the orbital period [day]
+\item $BMS$, the total binary mass [$M_\odot$]
+\item $e$, the orbital eccentricity
+\item $P_\mathrm{rot}$, the rotational period [day]
+\item $enc$, artificial energy term [?]
+\item $kh$, the number of mesh points and thus rows in the stellar structure block below 
+\item \hypertarget{kp}{$kp$}, the total number of models to calculate
+\item $jmod$, the current model number
+\item $jb$, the number of this star in the binary [1 or 2]
+\item $jin$, the number of independent variables and thus columns in the stellar structure block below [24 for non-TWIN, 40 for TWIN]
+\item $jf$, do or do not overwrite overwrite $I$ and $\phi$ (see below). Just keep it 0. [0 or 2]
+\end{enumerate}
+
+\pagebreak
+\subsection{Blocks of stellar structure}
+Each block contains the contents of the variable \texttt{H}: 24 models for non-TWIN models, 
+and 40 for TWIN models.
+Columns 1--16 are reserved for the primary, 17--25 for binary parameters
+and 26--40 have the same content as 1--16, but for the secondary in the TWIN case.
+In the loop over all meshpoints in \texttt{printb}, the variable \texttt{Q(1-24)} contains the
+same data as \texttt{H(1-24,I)} (or the corresponding variables for the secondary in a TWIN model)
+for each mesh point \texttt{I}.
+Each line represents a mesh point, the first one usually the \emph{surface}
+of the star.  The `eigenvalues' are marked with \emph{(EV)}.
+The columns are:
+
+\begin{enumerate}
+\item ln $f$, a dimensionless quantity closely related to electron degeneracy: 
+    for the case where electrons are non-degenerate and non-relativistic, $f \sim \ 10^8 \rho/T^{1.5}$ 
+\item ln $T$, logarithmic temperature [K]
+\item $X16$, mass abundance fraction of $^{16}$O
+\item $m$, mass [$10^{33}\,$g]
+\item $X1$, mass abundance fraction of $^1$H
+\item $C$, the gradient of mesh-spacing function $Q(f,T,m,r)$ with respect to mesh point number $K$ \emph{(EV)}.
+\item ln $r$, logarithmic radius [$10^{11}\,$cm]
+\item $L$, luminosity. Not logged, because it may be negative [$10^{33}\,$erg\,s$^{-1}$]
+\item $X4$, mass abundance fraction of $^4$He
+\item $X12$, mass abundance fraction of $^{12}$C
+\item $X20$, mass abundance fraction of $^{20}$Ne
+\item $I$, the moment of inertia of the interior material  [$10^{55}\,$g\,cm$^2$]
+\item $P_\mathrm{rot}$, the rotation period (days) of the star \emph{(EV)}. 
+\item $\phi$ - the centrifugal-gravitational potential [erg] 
+\item $\phi_\mathrm{s}$, the potential at the surface, minus the potential on the L1 surface \emph{(EV)} [erg]
+\item $X14$, mass abundance fraction of $^{14}$N
+\item $H_\mathrm{orb}$, the orbital angular momentum \emph{(EV)} [$10^{50}\,$gm\,cm$^2$\,s$^{-1}$]
+\item $e$, the orbital eccentricity \emph{(EV)}
+\item $F$, the flux of mass towards or away from the other star; a function of depth and zero below L1 [$10^{33}\,$g\,s$^{-1}$]
+\item \emph{$<$empty$>$}
+\item \emph{$<$empty$>$}
+\item \emph{$<$empty$>$}
+\item \emph{$<$empty$>$}
+\item \emph{$<$empty$>$}
+\item-- 40.: The same as variables 1--16, but for the secondary in case of a TWIN model, otherwise empty 
+(since $jin$ (above) equals 24 in that case).
+\end{enumerate}
+
+

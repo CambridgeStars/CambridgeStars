@@ -1,0 +1,87 @@
+\section{file.mdl\{1,2\}}
+
+The files \texttt{file.mdl1} and \texttt{file.mdl2} contain stellar-structure output, designed for plotting
+the stellar interiors.
+Each file starts with a line of 3 numbers, followed by a number of blocks, each of which contains a
+stellar-structure model saved during the evolution of the model star.  The parameter \hyperlink{kt1}{\texttt{KT1}}
+determines how often a structure model is saved.
+Each block starts with a line with two numbers. The rest of each block contains (typically a few hundred) 
+lines each with (a few tens of) columns.
+
+
+
+\subsection{Header}
+The first line of the file contains three parameters:
+\begin{enumerate}
+\item $N_\mathrm{mesh}$; number of mesh points in each model ($=$ the number of rows in each block), see the parameter \hyperlink{kh2}{\texttt{KH2}}.
+\item $N_\mathrm{var}$; number of output variables ($=$ the number of columns in the blocks)
+\item $D_\mathrm{overshoot}$ \remark{($=$ overshoot parameter \hyperlink{cos}{\texttt{COS}} ?)}
+\end{enumerate}
+
+
+
+\subsection{Blocks of stellar structure}
+Each block starts with one line with two values:
+\begin{enumerate}
+\item Model number for the block of output below
+\item $t$, model age [yr]
+\end{enumerate}
+
+
+The first line of each block is followed by an array of data consisting of $N_\mathrm{mesh}$ rows of $N_\mathrm{var}$ columns 
+each.  Hence, each row is a mesh point in the stellar model (a mass coordinate or radius coordinate).  The first row of each
+block contains data for the \emph{centre} of the star, the last ($N_\mathrm{mesh}$-th) row represents its \emph{surface}.
+In each row, there are $N_\mathrm{var}$ columns.  Each column contains a different physical quantity.  
+
+The quantities in the columns are:
+\begin{enumerate}
+\item $M$, mass coordinate [$M_\odot$] 
+\item $R$, radius coordinate [$R_\odot$] 
+\item $P$, pressure [dyn cm$^{-2}$] 
+\item $\rho$, density [g cm$^{-3}$]
+\item $T$, temperature [K]
+\item $\kappa$, opacity [cm$^2$ g$^{-1}$] 
+\item $\nabla_\mathrm{ad} = \left(\frac{\partial\log T}{\partial\log P}\right)_\mathrm{ad}$, adiabatic temperature gradient  [-] 
+\item $\nabla_\mathrm{rad}-\nabla_\mathrm{ad}$, temperature gradient difference [-]
+%9-15:
+\item-- \,15. Abundances of:~ 9: H,~ 10: He,~ 11: C,~ 12: N,~ 13: O,~ 14: Ne,~ 15: Mg
+
+\setcounter{enumi}{15}
+%16:
+\item $L$, total luminosity [$L_\odot$]
+\item $\varepsilon_\mathrm{th}$, energy generation due to contraction (can be negative) [erg g$^{-1}$ s$^{-1}$]
+\item $\varepsilon_\mathrm{nuc}$, energy generation by nuclear reactions [erg g$^{-1}$ s$^{-1}$]
+\item $\varepsilon_\nu$, energy generation in neutrinos [erg g$^{-1}$ s$^{-1}$]
+
+%20:
+\item $S$, specific entropy [erg g$^{-1}$ K$^{-1}$]
+\item $U_\mathrm{int}$, internal energy [erg g$^{-1}$]  % or $L/L_\mathrm{edd}$?
+\item Reaction rate RPP: pp chain, effectively: 2 p $\rightarrow$ $\frac{1}{2}$ He4
+\item Reaction rate RPC, effectively: C12 + 2 p $\rightarrow$ N14
+\item Reaction rate RPNG, effectively: N14 + 2 p $\rightarrow$ O16
+\item Reaction rate RPN, effectively: N14 + 2 p $\rightarrow$ C12 + He4
+\item Reaction rate RPO, effectively: O16 + 2 p $\rightarrow$ N14 + He4
+\item Reaction rate RAN, effectively: N14 + $\frac{3}{2}$ He4 $\rightarrow$ Ne20
+\item $C_p \frac{\mathrm{d}S}{\mathrm{d}P}$
+\item $\mu$, mean molecular weight [amu]
+
+%30:
+\item Mixing coefficient for thermohaline mixing (or unused)
+\item Mixing coefficient for convective mixing (convective velocity $\times$ mixing length)
+\item True temperature gradient: $\frac{\mathrm{d}\log T}{\mathrm{d}\log P}$
+%\item homology invariant: $\frac{\mathrm{d}\log \rho}{\mathrm{d}\log P}$ (or unused)
+%\item homology invariant: $U_\mathrm{hom}: \frac{\mathrm{d}\log R}{\mathrm{d}\log P}$ (or unused)
+%\item homology invariant: $V_\mathrm{hom}: \frac{\mathrm{d}\log M}{\mathrm{d}\log P}$ (or unused) 
+\item $\omega$, rotation rate \remark{CHECK}
+\item \remark{CHECK: $d\mu$?}
+\item \remark{CHECK: $d\omega$?}
+\item \remark{CHECK: Convection + artificial mixing}
+\item \remark{CHECK: Thermohaline mixing}
+\item \remark{CHECK: Solberg-Hoiland mixing}
+
+%40:
+\item \remark{CHECK: Dynamical-shear mixing}
+\item \remark{CHECK: Secular-shear mixing}
+\item \remark{CHECK: Eddington-Sweet mixing}
+\item \remark{CHECK: Goldberg-Schubert-Fricke mixing}
+\end{enumerate}
